@@ -1,6 +1,10 @@
-# NVIDIA Jetson NX IMX477 HQ RPI V3 camera driver
+# NVIDIA Jetson IMX477 HQ RPI V3 camera driver
 
 This driver has been developed by NVIDIA Corporation, RidgeRun Engineering and Leopard Imaging Inc. as a collaborative initiative in order to release the first version of the Sony IMX477 sensor driver for the Raspberry Pi HQ camera.
+
+Supports the following Jetson platforms:
+* Jetson Xavier NX
+* Jetson Nano
 
 ## Repository structure
 
@@ -10,25 +14,25 @@ In this repository you will find the following structure:
 ├── li-camera-calibration-files
 │   └── camera_overrides.isp
 ├── patches
-│   ├── 4.4.2_nx_imx477.patch
+│   ├── 4.4.3_l4t32.4.3_rbpv3_imx477_support.patch
 │   └── series
 └── README.md
 ```
 where:
 
-* `4.4.2_nx_imx477.patch` is the patch to be applied on the JetPack 4.4 sources in order to add support for the IMX477 camera sensor in the Jetson Xavier NX.
+* `4.4.3_l4t32.4.3_rbpv3_imx477_support.patch` is the patch to be applied on the JetPack 4.4 sources in order to add support for the IMX477 camera sensor in the Jetson Xavier NX and Jetson Nano.
 * `series` is a file containing the patch name in order to apply it by using the quilt tool.
 * `camera_overrides.isp` is a file which contains a set of calibration parameters for the Image Signal Processor of the HQ camera.
 
 ## Installation instructions
 
-In order to apply the patch on the JetPack 4.4 sources with Xavier NX support, you must perform the following instructions:
+In order to apply the patch on the JetPack 4.4 sources with Xavier NX and Nano support, you must perform the following instructions:
  
 * [JetPack 4.4 download and installation instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Download_the_JetPack_4.4)
 * [JetPack 4.4 sources download instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Download_the_JetPack_4.4_sources)
 * [Patch instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Patch_instructions)
 * [Kernel build instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Kernel_build_instructions)
-* [Flash the Xavier NX](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Flash_the_Xavier_NX)
+* [Flash the Jetson](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Flash_the_Jetson)
 
 ## ISP camera overrides installation
 

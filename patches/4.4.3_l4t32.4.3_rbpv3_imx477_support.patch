@@ -96,11 +96,10 @@ Date:   Fri Jun 26 16:29:07 2020 -0600
  create mode 100644 kernel/nvidia/drivers/media/i2c/imx477_mode_tbls.h
  create mode 100644 kernel/nvidia/include/media/imx477.h
 
-diff --git a/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-jakku-rbpcv3-imx477.dtsi b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-jakku-rbpcv3-imx477.dtsi
-new file mode 100644
-index 000000000..9a034f5c9
+Index: sources/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-jakku-rbpcv3-imx477.dtsi
+===================================================================
 --- /dev/null
-+++ b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-jakku-rbpcv3-imx477.dtsi
++++ sources/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-jakku-rbpcv3-imx477.dtsi
 @@ -0,0 +1,59 @@
 +/*
 + * Copyright (c) 2020, RidgeRun.  All rights reserved.
@@ -161,11 +160,10 @@ index 000000000..9a034f5c9
 +		};
 +	};
 +};
-diff --git a/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-rbpcv3-imx477.dtsi b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-rbpcv3-imx477.dtsi
-new file mode 100644
-index 000000000..3b38727cd
+Index: sources/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-rbpcv3-imx477.dtsi
+===================================================================
 --- /dev/null
-+++ b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-rbpcv3-imx477.dtsi
++++ sources/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-rbpcv3-imx477.dtsi
 @@ -0,0 +1,369 @@
 +/*
 + * Copyright (c) 2020, RidgeRun.  All rights reserved.
@@ -536,10 +534,10 @@ index 000000000..3b38727cd
 +		};
 +	};
 +};
-diff --git a/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi
-index f256af383..0d30d57fb 100644
---- a/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi
-+++ b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi
+Index: sources/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi
+===================================================================
+--- sources.orig/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi
++++ sources/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi
 @@ -16,7 +16,7 @@
  #include "tegra194-p3509-disp.dtsi"
  #include "tegra194-audio-p3668.dtsi"
@@ -549,10 +547,10 @@ index f256af383..0d30d57fb 100644
  / {
  	gpio-keys {
  		compatible = "gpio-keys";
-diff --git a/kernel/nvidia/drivers/media/i2c/Kconfig b/kernel/nvidia/drivers/media/i2c/Kconfig
-index abfb5f596..b9e91fd4e 100644
---- a/kernel/nvidia/drivers/media/i2c/Kconfig
-+++ b/kernel/nvidia/drivers/media/i2c/Kconfig
+Index: sources/kernel/nvidia/drivers/media/i2c/Kconfig
+===================================================================
+--- sources.orig/kernel/nvidia/drivers/media/i2c/Kconfig
++++ sources/kernel/nvidia/drivers/media/i2c/Kconfig
 @@ -13,6 +13,15 @@ config VIDEO_IMX185
  	To compile this driver as a module, choose M here: the module
  	will be called imx185.
@@ -569,11 +567,11 @@ index abfb5f596..b9e91fd4e 100644
  config VIDEO_IMX219
          tristate "IMX219 camera sensor support"
  	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
-diff --git a/kernel/nvidia/drivers/media/i2c/Makefile b/kernel/nvidia/drivers/media/i2c/Makefile
-index 3e808e1ce..7eb6eb430 100644
---- a/kernel/nvidia/drivers/media/i2c/Makefile
-+++ b/kernel/nvidia/drivers/media/i2c/Makefile
-@@ -5,6 +5,7 @@ ccflags-y += -I$(srctree)/drivers/video/tegra/camera
+Index: sources/kernel/nvidia/drivers/media/i2c/Makefile
+===================================================================
+--- sources.orig/kernel/nvidia/drivers/media/i2c/Makefile
++++ sources/kernel/nvidia/drivers/media/i2c/Makefile
+@@ -5,6 +5,7 @@ ccflags-y += -I$(srctree)/drivers/video/
  
  obj-$(CONFIG_VIDEO_IMX185) += imx185.o
  obj-$(CONFIG_VIDEO_IMX185) += imx185_v1.o
@@ -581,11 +579,10 @@ index 3e808e1ce..7eb6eb430 100644
  obj-$(CONFIG_VIDEO_IMX219) += imx219.o
  obj-$(CONFIG_VIDEO_IMX268) += imx268.o
  obj-$(CONFIG_VIDEO_IMX274) += imx274.o
-diff --git a/kernel/nvidia/drivers/media/i2c/imx477.c b/kernel/nvidia/drivers/media/i2c/imx477.c
-new file mode 100644
-index 000000000..da4f71574
+Index: sources/kernel/nvidia/drivers/media/i2c/imx477.c
+===================================================================
 --- /dev/null
-+++ b/kernel/nvidia/drivers/media/i2c/imx477.c
++++ sources/kernel/nvidia/drivers/media/i2c/imx477.c
 @@ -0,0 +1,796 @@
 +/*
 + * imx477.c - imx477 sensor driver
@@ -1383,11 +1380,10 @@ index 000000000..da4f71574
 +MODULE_DESCRIPTION("Media Controller driver for Sony IMX477");
 +MODULE_AUTHOR("RidgeRun");
 +MODULE_LICENSE("GPL v2");
-diff --git a/kernel/nvidia/drivers/media/i2c/imx477_mode_tbls.h b/kernel/nvidia/drivers/media/i2c/imx477_mode_tbls.h
-new file mode 100644
-index 000000000..dd2cfe06f
+Index: sources/kernel/nvidia/drivers/media/i2c/imx477_mode_tbls.h
+===================================================================
 --- /dev/null
-+++ b/kernel/nvidia/drivers/media/i2c/imx477_mode_tbls.h
++++ sources/kernel/nvidia/drivers/media/i2c/imx477_mode_tbls.h
 @@ -0,0 +1,624 @@
 +/*
 + * imx477_mode_tbls.h - imx477 sensor mode tables
@@ -2013,11 +2009,10 @@ index 000000000..dd2cfe06f
 +	{{1920, 1080}, imx477_60_fr, 1, 0, IMX477_MODE_1920x1080_60FPS},
 +};
 +#endif /* __IMX477_I2C_TABLES__ */
-diff --git a/kernel/nvidia/include/media/imx477.h b/kernel/nvidia/include/media/imx477.h
-new file mode 100644
-index 000000000..79c7e588e
+Index: sources/kernel/nvidia/include/media/imx477.h
+===================================================================
 --- /dev/null
-+++ b/kernel/nvidia/include/media/imx477.h
++++ sources/kernel/nvidia/include/media/imx477.h
 @@ -0,0 +1,51 @@
 +/*
 + * imx477_.h - imx477 sensor header
@@ -2070,6 +2065,1257 @@ index 000000000..79c7e588e
 +#define IMX477_GROUP_HOLD_ADDR		        0x0104
 +
 +#endif /* __IMX477_H__ */
--- 
-2.17.1
-
+Index: sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi
+===================================================================
+--- /dev/null
++++ sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi
+@@ -0,0 +1,559 @@
++/*
++ * Copyright (c) 2018-2019, NVIDIA CORPORATION.  All rights reserved.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#include <dt-bindings/media/camera.h>
++#include <dt-bindings/platform/t210/t210.h>
++
++/ {
++	host1x {
++		vi_base: vi {
++			num-channels = <2>;
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				vi_port0: port@0 {
++					reg = <0>;
++					rbpcv3_imx477_vi_in0: endpoint {
++						port-index = <0>;
++						bus-width = <2>;
++						remote-endpoint = <&rbpcv3_imx477_csi_out0>;
++					};
++				};
++				vi_port1: port@1 {
++					reg = <1>;
++					rbpcv3_imx477_vi_in1: endpoint {
++						port-index = <4>;
++						bus-width = <2>;
++						remote-endpoint = <&rbpcv3_imx477_csi_out1>;
++					};
++				};
++			};
++		};
++
++		csi_base: nvcsi {
++			num-channels = <2>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			csi_chan0: channel@0 {
++				reg = <0>;
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++					csi_chan0_port0: port@0 {
++						reg = <0>;
++						rbpcv3_imx477_csi_in0: endpoint@0 {
++							port-index = <0>;
++							bus-width = <2>;
++							remote-endpoint = <&rbpcv3_imx477_dual_out0>;
++						};
++					};
++					csi_chan0_port1: port@1 {
++						reg = <1>;
++						rbpcv3_imx477_csi_out0: endpoint@1 {
++							remote-endpoint = <&rbpcv3_imx477_vi_in0>;
++						};
++					};
++				};
++			};
++			csi_chan1: channel@1 {
++				reg = <1>;
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++					csi_chan1_port0: port@2 {
++						reg = <0>;
++						rbpcv3_imx477_csi_in1: endpoint@2 {
++							port-index = <4>;
++							bus-width = <2>;
++							remote-endpoint = <&rbpcv3_imx477_out1>;
++						};
++					};
++					csi_chan1_port1: port@3 {
++						reg = <1>;
++						rbpcv3_imx477_csi_out1: endpoint@3 {
++							remote-endpoint = <&rbpcv3_imx477_vi_in1>;
++						};
++					};
++				};
++			};
++		};
++	};
++
++	cam_i2cmux {
++		i2c_0: i2c@0 {
++			imx477_cam0: rbpcv3_imx477_a@1a {
++				compatible = "ridgerun,imx477";
++				/* I2C device address */
++				reg = <0x1a>;
++
++				/* V4L2 device node location */
++				devnode = "video0";
++
++				/* Physical dimensions of sensor */
++				physical_w = "3.680";
++				physical_h = "2.760";
++
++				sensor_model = "imx477";
++
++				use_sensor_mode_id = "true";
++
++				/**
++				* ==== Modes ====
++				* A modeX node is required to support v4l2 driver
++				* implementation with NVIDIA camera software stack
++				*
++				* == Signal properties ==
++				*
++				* phy_mode = "";
++				* PHY mode used by the MIPI lanes for this device
++				*
++				* tegra_sinterface = "";
++				* CSI Serial interface connected to tegra
++				* Incase of virtual HW devices, use virtual
++				* For SW emulated devices, use host
++				*
++				* pix_clk_hz = "";
++				* Sensor pixel clock used for calculations like exposure and framerate
++				*
++				* readout_orientation = "0";
++				* Based on camera module orientation.
++				* Only change readout_orientation if you specifically
++				* Program a different readout order for this mode
++				*
++				* == Image format Properties ==
++				*
++				* active_w = "";
++				* Pixel active region width
++				*
++				* active_h = "";
++				* Pixel active region height
++				*
++				* pixel_t = "";
++				* The sensor readout pixel pattern
++				*
++				* line_length = "";
++				* Pixel line length (width) for sensor mode.
++				*
++				* == Source Control Settings ==
++				*
++				* Gain factor used to convert fixed point integer to float
++				* Gain range [min_gain/gain_factor, max_gain/gain_factor]
++				* Gain step [step_gain/gain_factor is the smallest step that can be configured]
++				* Default gain [Default gain to be initialized for the control.
++				*     use min_gain_val as default for optimal results]
++				* Framerate factor used to convert fixed point integer to float
++				* Framerate range [min_framerate/framerate_factor, max_framerate/framerate_factor]
++				* Framerate step [step_framerate/framerate_factor is the smallest step that can be configured]
++				* Default Framerate [Default framerate to be initialized for the control.
++				*     use max_framerate to get required performance]
++				* Exposure factor used to convert fixed point integer to float
++				* For convenience use 1 sec = 1000000us as conversion factor
++				* Exposure range [min_exp_time/exposure_factor, max_exp_time/exposure_factor]
++				* Exposure step [step_exp_time/exposure_factor is the smallest step that can be configured]
++				* Default Exposure Time [Default exposure to be initialized for the control.
++				*     Set default exposure based on the default_framerate for optimal exposure settings]
++				*
++				* gain_factor = ""; (integer factor used for floating to fixed point conversion)
++				* min_gain_val = ""; (ceil to integer)
++				* max_gain_val = ""; (ceil to integer)
++				* step_gain_val = ""; (ceil to integer)
++				* default_gain = ""; (ceil to integer)
++				* Gain limits for mode
++				*
++				* exposure_factor = ""; (integer factor used for floating to fixed point conversion)
++				* min_exp_time = ""; (ceil to integer)
++				* max_exp_time = ""; (ceil to integer)
++				* step_exp_time = ""; (ceil to integer)
++				* default_exp_time = ""; (ceil to integer)
++				* Exposure Time limits for mode (sec)
++				*
++				* framerate_factor = ""; (integer factor used for floating to fixed point conversion)
++				* min_framerate = ""; (ceil to integer)
++				* max_framerate = ""; (ceil to integer)
++				* step_framerate = ""; (ceil to integer)
++				* default_framerate = ""; (ceil to integer)
++				* Framerate limits for mode (fps)
++				*
++				* embedded_metadata_height = "";
++				* Sensor embedded metadata height in units of rows.
++				* If sensor does not support embedded metadata value should be 0.
++				*/
++				mode0 { /* IMX477_MODE_4032X3040 */
++					mclk_khz = "24000";
++					num_lanes = "2";
++					tegra_sinterface = "serial_a";
++					phy_mode = "DPHY";
++					discontinuous_clk = "no";
++					dpcm_enable = "false";
++					cil_settletime = "0";
++
++					active_w = "4032";
++					active_h = "3040";
++					mode_type = "bayer";
++					pixel_phase = "rggb";
++					csi_pixel_bit_depth = "10";
++					readout_orientation = "90";
++					line_length = "9024";
++					inherent_gain = "1";
++					mclk_multiplier = "80";
++					pix_clk_hz = "840000000";
++
++					gain_factor = "16";
++					framerate_factor = "1000000";
++					exposure_factor = "1000000";
++					min_gain_val = "16"; /* 1.00x */
++					max_gain_val = "356"; /* 22x */
++					step_gain_val = "1";
++					default_gain = "16"; /* 1.00x */
++					min_hdr_ratio = "1";
++					max_hdr_ratio = "1";
++					min_framerate = "2000000"; /* 2.0 fps */
++					max_framerate = "30000000"; /* 30.0 fps */
++					step_framerate = "1";
++					default_framerate = "30000000"; /* 30.0 fps */
++					min_exp_time = "13"; /* us */
++					max_exp_time = "683709"; /* us */
++					step_exp_time = "1";
++					default_exp_time = "2495"; /* us */
++
++					embedded_metadata_height = "2";
++				};
++				mode1 { /* IMX477_MODE_1920X1080 */
++					mclk_khz = "24000";
++					num_lanes = "2";
++					tegra_sinterface = "serial_a";
++					phy_mode = "DPHY";
++					discontinuous_clk = "no";
++					dpcm_enable = "false";
++					cil_settletime = "0";
++
++					active_w = "1920";
++					active_h = "1080";
++					mode_type = "bayer";
++					pixel_phase = "rggb";
++					csi_pixel_bit_depth = "10";
++					readout_orientation = "90";
++					line_length = "9024";
++					inherent_gain = "1";
++					mclk_multiplier = "80";
++					pix_clk_hz = "840000000";
++
++					gain_factor = "16";
++					framerate_factor = "1000000";
++					exposure_factor = "1000000";
++					min_gain_val = "16"; /* 1.00x */
++					max_gain_val = "356"; /* 22x */
++					step_gain_val = "1";
++					default_gain = "16"; /* 1.00x */
++					min_hdr_ratio = "1";
++					max_hdr_ratio = "1";
++					min_framerate = "2000000"; /* 2.0 fps */
++					max_framerate = "60000000"; /* 60.0 fps */
++					step_framerate = "1";
++					default_framerate = "60000000"; /* 60.0 fps */
++					min_exp_time = "13"; /* us */
++					max_exp_time = "683709"; /* us */
++					step_exp_time = "1";
++					default_exp_time = "2495"; /* us */
++
++					embedded_metadata_height = "2";
++				};
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						rbpcv3_imx477_dual_out0: endpoint {
++							port-index = <0>;
++							bus-width = <2>;
++							remote-endpoint = <&rbpcv3_imx477_csi_in0>;
++						};
++					};
++				};
++			};
++		};
++		i2c_1: i2c@1 {
++			imx477_cam1: rbpcv3_imx477_e@1a {
++				compatible = "nvidia,imx477";
++				/* I2C device address */
++				reg = <0x1a>;
++
++				/* V4L2 device node location */
++				devnode = "video1";
++
++				/* Physical dimensions of sensor */
++				physical_w = "3.680";
++				physical_h = "2.760";
++
++				sensor_model = "imx477";
++
++				use_sensor_mode_id = "true";
++
++				/**
++				* ==== Modes ====
++				* A modeX node is required to support v4l2 driver
++				* implementation with NVIDIA camera software stack
++				*
++				* == Signal properties ==
++				*
++				* phy_mode = "";
++				* PHY mode used by the MIPI lanes for this device
++				*
++				* tegra_sinterface = "";
++				* CSI Serial interface connected to tegra
++				* Incase of virtual HW devices, use virtual
++				* For SW emulated devices, use host
++				*
++				* pix_clk_hz = "";
++				* Sensor pixel clock used for calculations like exposure and framerate
++				*
++				* readout_orientation = "0";
++				* Based on camera module orientation.
++				* Only change readout_orientation if you specifically
++				* Program a different readout order for this mode
++				*
++				* == Image format Properties ==
++				*
++				* active_w = "";
++				* Pixel active region width
++				*
++				* active_h = "";
++				* Pixel active region height
++				*
++				* pixel_t = "";
++				* The sensor readout pixel pattern
++				*
++				* line_length = "";
++				* Pixel line length (width) for sensor mode.
++				*
++				* == Source Control Settings ==
++				*
++				* Gain factor used to convert fixed point integer to float
++				* Gain range [min_gain/gain_factor, max_gain/gain_factor]
++				* Gain step [step_gain/gain_factor is the smallest step that can be configured]
++				* Default gain [Default gain to be initialized for the control.
++				*     use min_gain_val as default for optimal results]
++				* Framerate factor used to convert fixed point integer to float
++				* Framerate range [min_framerate/framerate_factor, max_framerate/framerate_factor]
++				* Framerate step [step_framerate/framerate_factor is the smallest step that can be configured]
++				* Default Framerate [Default framerate to be initialized for the control.
++				*     use max_framerate to get required performance]
++				* Exposure factor used to convert fixed point integer to float
++				* For convenience use 1 sec = 1000000us as conversion factor
++				* Exposure range [min_exp_time/exposure_factor, max_exp_time/exposure_factor]
++				* Exposure step [step_exp_time/exposure_factor is the smallest step that can be configured]
++				* Default Exposure Time [Default exposure to be initialized for the control.
++				*     Set default exposure based on the default_framerate for optimal exposure settings]
++				*
++				* gain_factor = ""; (integer factor used for floating to fixed point conversion)
++				* min_gain_val = ""; (ceil to integer)
++				* max_gain_val = ""; (ceil to integer)
++				* step_gain_val = ""; (ceil to integer)
++				* default_gain = ""; (ceil to integer)
++				* Gain limits for mode
++				*
++				* exposure_factor = ""; (integer factor used for floating to fixed point conversion)
++				* min_exp_time = ""; (ceil to integer)
++				* max_exp_time = ""; (ceil to integer)
++				* step_exp_time = ""; (ceil to integer)
++				* default_exp_time = ""; (ceil to integer)
++				* Exposure Time limits for mode (sec)
++				*
++				* framerate_factor = ""; (integer factor used for floating to fixed point conversion)
++				* min_framerate = ""; (ceil to integer)
++				* max_framerate = ""; (ceil to integer)
++				* step_framerate = ""; (ceil to integer)
++				* default_framerate = ""; (ceil to integer)
++				* Framerate limits for mode (fps)
++				*
++				* embedded_metadata_height = "";
++				* Sensor embedded metadata height in units of rows.
++				* If sensor does not support embedded metadata value should be 0.
++				*/
++				mode0 { /* IMX477_MODE_4032X3040 */
++					mclk_khz = "24000";
++					num_lanes = "2";
++					tegra_sinterface = "serial_e";
++					phy_mode = "DPHY";
++					discontinuous_clk = "no";
++					dpcm_enable = "false";
++					cil_settletime = "0";
++
++					active_w = "4032";
++					active_h = "3040";
++					mode_type = "bayer";
++					pixel_phase = "rggb";
++					csi_pixel_bit_depth = "10";
++					readout_orientation = "90";
++					line_length = "9024";
++					inherent_gain = "1";
++					mclk_multiplier = "80";
++					pix_clk_hz = "840000000";
++
++					gain_factor = "16";
++					framerate_factor = "1000000";
++					exposure_factor = "1000000";
++					min_gain_val = "16"; /* 1.00x */
++					max_gain_val = "356"; /* 22x */
++					step_gain_val = "1";
++					default_gain = "16"; /* 1.00x */
++					min_hdr_ratio = "1";
++					max_hdr_ratio = "1";
++					min_framerate = "2000000"; /* 2.0 fps */
++					max_framerate = "30000000"; /* 30.0 fps */
++					step_framerate = "1";
++					default_framerate = "30000000"; /* 30.0 fps */
++					min_exp_time = "13"; /* us */
++					max_exp_time = "683709"; /* us */
++					step_exp_time = "1";
++					default_exp_time = "2495"; /* us */
++
++					embedded_metadata_height = "2";
++				};
++				mode1 { /* IMX477_MODE_1920X1080 */
++					mclk_khz = "24000";
++					num_lanes = "2";
++					tegra_sinterface = "serial_e";
++					phy_mode = "DPHY";
++					discontinuous_clk = "no";
++					dpcm_enable = "false";
++					cil_settletime = "0";
++
++					active_w = "1920";
++					active_h = "1080";
++					mode_type = "bayer";
++					pixel_phase = "rggb";
++					csi_pixel_bit_depth = "10";
++					readout_orientation = "90";
++					line_length = "9024";
++					inherent_gain = "1";
++					mclk_multiplier = "80";
++					pix_clk_hz = "840000000";
++
++					gain_factor = "16";
++					framerate_factor = "1000000";
++					exposure_factor = "1000000";
++					min_gain_val = "16"; /* 1.00x */
++					max_gain_val = "356"; /* 22x */
++					step_gain_val = "1";
++					default_gain = "16"; /* 1.00x */
++					min_hdr_ratio = "1";
++					max_hdr_ratio = "1";
++					min_framerate = "2000000"; /* 2.0 fps */
++					max_framerate = "60000000"; /* 60.0 fps */
++					step_framerate = "1";
++					default_framerate = "60000000"; /* 60.0 fps */
++					min_exp_time = "13"; /* us */
++					max_exp_time = "683709"; /* us */
++					step_exp_time = "1";
++					default_exp_time = "2495"; /* us */
++
++					embedded_metadata_height = "2";
++				};
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						rbpcv3_imx477_out1: endpoint {
++							port-index = <4>;
++							bus-width = <2>;
++							remote-endpoint = <&rbpcv3_imx477_csi_in1>;
++						};
++					};
++				};
++			};
++		};
++	};
++};
++
++/ {
++	tcp: tegra-camera-platform {
++		compatible = "nvidia, tegra-camera-platform";
++
++		/**
++		* Physical settings to calculate max ISO BW
++		*
++		* num_csi_lanes = <>;
++		* Total number of CSI lanes when all cameras are active
++		*
++		* max_lane_speed = <>;
++		* Max lane speed in Kbit/s
++		*
++		* min_bits_per_pixel = <>;
++		* Min bits per pixel
++		*
++		* vi_peak_byte_per_pixel = <>;
++		* Max byte per pixel for the VI ISO case
++		*
++		* vi_bw_margin_pct = <>;
++		* Vi bandwidth margin in percentage
++		*
++		* max_pixel_rate = <>;
++		* Max pixel rate in Kpixel/s for the ISP ISO case
++		*
++		* isp_peak_byte_per_pixel = <>;
++		* Max byte per pixel for the ISP ISO case
++		*
++		* isp_bw_margin_pct = <>;
++		* Isp bandwidth margin in percentage
++		*/
++		num_csi_lanes = <4>;
++		max_lane_speed = <1500000>;
++		min_bits_per_pixel = <10>;
++		vi_peak_byte_per_pixel = <2>;
++		vi_bw_margin_pct = <25>;
++		max_pixel_rate = <7500000>;
++		isp_peak_byte_per_pixel = <5>;
++		isp_bw_margin_pct = <25>;
++
++		/**
++		 * The general guideline for naming badge_info contains 3 parts, and is as follows,
++		 * The first part is the camera_board_id for the module; if the module is in a FFD
++		 * platform, then use the platform name for this part.
++		 * The second part contains the position of the module, ex. "rear" or "front".
++		 * The third part contains the last 6 characters of a part number which is found
++		 * in the module's specsheet from the vendor.
++		 */
++		modules {
++			cam_module0: module0 {
++				badge = "porg_front_RBPCV3";
++				position = "front";
++				orientation = "1";
++				cam_module0_drivernode0: drivernode0 {
++					pcl_id = "v4l2_sensor";
++					devname = "imx477 7-001a";
++					proc-device-tree = "/proc/device-tree/cam_i2cmux/i2c@0/rbpcv3_imx477_a@1a";
++				};
++			};
++			cam_module1: module1 {
++				badge = "porg_rear_RBPCV3";
++				position = "rear";
++				orientation = "1";
++				cam_module1_drivernode0: drivernode0 {
++					pcl_id = "v4l2_sensor";
++					devname = "imx477 8-001a";
++					proc-device-tree = "/proc/device-tree/cam_i2cmux/i2c@1/rbpcv3_imx477_e@1a";
++				};
++			};
++		};
++	};
++};
+Index: sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi
+===================================================================
+--- /dev/null
++++ sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi
+@@ -0,0 +1,324 @@
++/*
++ * Copyright (c) 2018-2019, NVIDIA CORPORATION.  All rights reserved.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#include <dt-bindings/media/camera.h>
++#include <dt-bindings/platform/t210/t210.h>
++
++/ {
++	host1x {
++		vi_base: vi {
++			num-channels = <1>;
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				vi_port0: port@0 {
++					reg = <0>;
++					rbpcv3_imx477_vi_in0: endpoint {
++						port-index = <0>;
++						bus-width = <2>;
++						remote-endpoint = <&rbpcv3_imx477_csi_out0>;
++					};
++				};
++			};
++		};
++
++		csi_base: nvcsi {
++			num-channels = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			csi_chan0: channel@0 {
++				reg = <0>;
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++					csi_chan0_port0: port@0 {
++						reg = <0>;
++						rbpcv3_imx477_csi_in0: endpoint@0 {
++							port-index = <0>;
++							bus-width = <2>;
++							remote-endpoint = <&rbpcv3_imx477_out0>;
++						};
++					};
++					csi_chan0_port1: port@1 {
++						reg = <1>;
++						rbpcv3_imx477_csi_out0: endpoint@1 {
++							remote-endpoint = <&rbpcv3_imx477_vi_in0>;
++						};
++					};
++				};
++			};
++		};
++
++		i2c@546c0000 {
++			imx477_single_cam0: rbpcv3_imx477_a@1a {
++				compatible = "ridgerun,imx477";
++				/* I2C device address */
++				reg = <0x1a>;
++
++				/* V4L2 device node location */
++				devnode = "video0";
++
++				/* Physical dimensions of sensor */
++				physical_w = "3.680";
++				physical_h = "2.760";
++
++				sensor_model = "imx477";
++
++				use_sensor_mode_id = "true";
++
++				/**
++				* ==== Modes ====
++				* A modeX node is required to support v4l2 driver
++				* implementation with NVIDIA camera software stack
++				*
++				* == Signal properties ==
++				*
++				* phy_mode = "";
++				* PHY mode used by the MIPI lanes for this device
++				*
++				* tegra_sinterface = "";
++				* CSI Serial interface connected to tegra
++				* Incase of virtual HW devices, use virtual
++				* For SW emulated devices, use host
++				*
++				* pix_clk_hz = "";
++				* Sensor pixel clock used for calculations like exposure and framerate
++				*
++				* readout_orientation = "0";
++				* Based on camera module orientation.
++				* Only change readout_orientation if you specifically
++				* Program a different readout order for this mode
++				*
++				* == Image format Properties ==
++				*
++				* active_w = "";
++				* Pixel active region width
++				*
++				* active_h = "";
++				* Pixel active region height
++				*
++				* pixel_t = "";
++				* The sensor readout pixel pattern
++				*
++				* line_length = "";
++				* Pixel line length (width) for sensor mode.
++				*
++				* == Source Control Settings ==
++				*
++				* Gain factor used to convert fixed point integer to float
++				* Gain range [min_gain/gain_factor, max_gain/gain_factor]
++				* Gain step [step_gain/gain_factor is the smallest step that can be configured]
++				* Default gain [Default gain to be initialized for the control.
++				*     use min_gain_val as default for optimal results]
++				* Framerate factor used to convert fixed point integer to float
++				* Framerate range [min_framerate/framerate_factor, max_framerate/framerate_factor]
++				* Framerate step [step_framerate/framerate_factor is the smallest step that can be configured]
++				* Default Framerate [Default framerate to be initialized for the control.
++				*     use max_framerate to get required performance]
++				* Exposure factor used to convert fixed point integer to float
++				* For convenience use 1 sec = 1000000us as conversion factor
++				* Exposure range [min_exp_time/exposure_factor, max_exp_time/exposure_factor]
++				* Exposure step [step_exp_time/exposure_factor is the smallest step that can be configured]
++				* Default Exposure Time [Default exposure to be initialized for the control.
++				*     Set default exposure based on the default_framerate for optimal exposure settings]
++				*
++				* gain_factor = ""; (integer factor used for floating to fixed point conversion)
++				* min_gain_val = ""; (ceil to integer)
++				* max_gain_val = ""; (ceil to integer)
++				* step_gain_val = ""; (ceil to integer)
++				* default_gain = ""; (ceil to integer)
++				* Gain limits for mode
++				*
++				* exposure_factor = ""; (integer factor used for floating to fixed point conversion)
++				* min_exp_time = ""; (ceil to integer)
++				* max_exp_time = ""; (ceil to integer)
++				* step_exp_time = ""; (ceil to integer)
++				* default_exp_time = ""; (ceil to integer)
++				* Exposure Time limits for mode (sec)
++				*
++				* framerate_factor = ""; (integer factor used for floating to fixed point conversion)
++				* min_framerate = ""; (ceil to integer)
++				* max_framerate = ""; (ceil to integer)
++				* step_framerate = ""; (ceil to integer)
++				* default_framerate = ""; (ceil to integer)
++				* Framerate limits for mode (fps)
++				*
++				* embedded_metadata_height = "";
++				* Sensor embedded metadata height in units of rows.
++				* If sensor does not support embedded metadata value should be 0.
++				*/
++				mode0 { /* IMX477_MODE_4032X3040 */
++					mclk_khz = "24000";
++					num_lanes = "2";
++					tegra_sinterface = "serial_a";
++					phy_mode = "DPHY";
++					discontinuous_clk = "no";
++					dpcm_enable = "false";
++					cil_settletime = "0";
++
++					active_w = "4032";
++					active_h = "3040";
++					mode_type = "bayer";
++					pixel_phase = "rggb";
++					csi_pixel_bit_depth = "10";
++					readout_orientation = "90";
++					line_length = "9024";
++					inherent_gain = "1";
++					mclk_multiplier = "80";
++					pix_clk_hz = "840000000";
++
++					gain_factor = "16";
++					framerate_factor = "1000000";
++					exposure_factor = "1000000";
++					min_gain_val = "16"; /* 1.00x */
++					max_gain_val = "356"; /* 22x */
++					step_gain_val = "1";
++					default_gain = "16"; /* 1.00x */
++					min_hdr_ratio = "1";
++					max_hdr_ratio = "1";
++					min_framerate = "2000000"; /* 2.0 fps */
++					max_framerate = "30000000"; /* 30.0 fps */
++					step_framerate = "1";
++					default_framerate = "30000000"; /* 30.0 fps */
++					min_exp_time = "13"; /* us */
++					max_exp_time = "683709"; /* us */
++					step_exp_time = "1";
++					default_exp_time = "2495"; /* us */
++
++					embedded_metadata_height = "2";
++				};
++				mode1 { /* IMX477_MODE_1920X1080 */
++					mclk_khz = "24000";
++					num_lanes = "2";
++					tegra_sinterface = "serial_a";
++					phy_mode = "DPHY";
++					discontinuous_clk = "no";
++					dpcm_enable = "false";
++					cil_settletime = "0";
++
++					active_w = "1920";
++					active_h = "1080";
++					mode_type = "bayer";
++					pixel_phase = "rggb";
++					csi_pixel_bit_depth = "10";
++					readout_orientation = "90";
++					line_length = "9024";
++					inherent_gain = "1";
++					mclk_multiplier = "80";
++					pix_clk_hz = "840000000";
++
++					gain_factor = "16";
++					framerate_factor = "1000000";
++					exposure_factor = "1000000";
++					min_gain_val = "16"; /* 1.00x */
++					max_gain_val = "356"; /* 22x */
++					step_gain_val = "1";
++					default_gain = "16"; /* 1.00x */
++					min_hdr_ratio = "1";
++					max_hdr_ratio = "1";
++					min_framerate = "2000000"; /* 2.0 fps */
++					max_framerate = "60000000"; /* 60.0 fps */
++					step_framerate = "1";
++					default_framerate = "60000000"; /* 60.0 fps */
++					min_exp_time = "13"; /* us */
++					max_exp_time = "683709"; /* us */
++					step_exp_time = "1";
++					default_exp_time = "2495"; /* us */
++
++					embedded_metadata_height = "2";
++				};
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						rbpcv3_imx477_out0: endpoint {
++							port-index = <0>;
++							bus-width = <2>;
++							remote-endpoint = <&rbpcv3_imx477_csi_in0>;
++						};
++					};
++				};
++			};
++		};
++    };
++};
++
++/ {
++	tcp: tegra-camera-platform {
++		compatible = "nvidia, tegra-camera-platform";
++
++		/**
++		* Physical settings to calculate max ISO BW
++		*
++		* num_csi_lanes = <>;
++		* Total number of CSI lanes when all cameras are active
++		*
++		* max_lane_speed = <>;
++		* Max lane speed in Kbit/s
++		*
++		* min_bits_per_pixel = <>;
++		* Min bits per pixel
++		*
++		* vi_peak_byte_per_pixel = <>;
++		* Max byte per pixel for the VI ISO case
++		*
++		* vi_bw_margin_pct = <>;
++		* Vi bandwidth margin in percentage
++		*
++		* max_pixel_rate = <>;
++		* Max pixel rate in Kpixel/s for the ISP ISO case
++		*
++		* isp_peak_byte_per_pixel = <>;
++		* Max byte per pixel for the ISP ISO case
++		*
++		* isp_bw_margin_pct = <>;
++		* Isp bandwidth margin in percentage
++		*/
++		num_csi_lanes = <2>;
++		max_lane_speed = <1500000>;
++		min_bits_per_pixel = <10>;
++		vi_peak_byte_per_pixel = <2>;
++		vi_bw_margin_pct = <25>;
++		max_pixel_rate = <7500000>;
++		isp_peak_byte_per_pixel = <5>;
++		isp_bw_margin_pct = <25>;
++
++		/**
++		 * The general guideline for naming badge_info contains 3 parts, and is as follows,
++		 * The first part is the camera_board_id for the module; if the module is in a FFD
++		 * platform, then use the platform name for this part.
++		 * The second part contains the position of the module, ex. "rear" or "front".
++		 * The third part contains the last 6 characters of a part number which is found
++		 * in the module's specsheet from the vendor.
++		 */
++		modules {
++			cam_module0: module0 {
++				badge = "porg_front_RBPCV3";
++				position = "front";
++				orientation = "1";
++				cam_module0_drivernode0: drivernode0 {
++					pcl_id = "v4l2_sensor";
++					devname = "imx477 6-001a";
++					proc-device-tree = "/proc/device-tree/host1x/i2c@546c0000/rbpcv3_imx477_a@1a";
++				};
++			};
++		};
++	};
++};
+Index: sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-dual-imx477.dtsi
+===================================================================
+--- /dev/null
++++ sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-dual-imx477.dtsi
+@@ -0,0 +1,62 @@
++/*
++ * Copyright (c) 2018-2019, NVIDIA CORPORATION.  All rights reserved.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#include "tegra210-camera-rbpcv3-dual-imx477.dtsi"
++
++#define CAM1_PWDN		TEGRA_GPIO(S, 7)
++#define CAM2_PWDN		TEGRA_GPIO(T, 0)
++#define CAM_I2C_MUX TEGRA_GPIO(I, 0) // NFC_EN GPIO
++
++/ {
++	cam_i2cmux {
++		compatible = "i2c-mux-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		mux-gpios = <&gpio CAM_I2C_MUX GPIO_ACTIVE_HIGH>;
++		i2c-parent = <&i2c7>;
++		status = "okay";
++		i2c@0 {
++			status = "okay";
++			reg = <0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			rbpcv3_imx477_a@1a {
++				status = "okay";
++				reset-gpios = <&gpio CAM1_PWDN GPIO_ACTIVE_HIGH>;
++			};
++		};
++		i2c@1 {
++			status = "okay";
++			reg = <1>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			rbpcv3_imx477_e@1a {
++				status = "okay";
++				reset-gpios = <&gpio CAM2_PWDN GPIO_ACTIVE_HIGH>;
++			};
++		};
++	};
++
++	gpio@6000d000 {
++		camera-control-output-low {
++			gpio-hog;
++			output-low;
++			gpios = < CAM1_PWDN 0  CAM2_PWDN 0>;
++			label = "cam1-pwdn", "cam2-pwdn";
++		};
++	};
++};
+Index: sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-imx477.dtsi
+===================================================================
+--- /dev/null
++++ sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-imx477.dtsi
+@@ -0,0 +1,40 @@
++/*
++ * Copyright (c) 2018-2019, NVIDIA CORPORATION.  All rights reserved.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#include "tegra210-camera-rbpcv3-imx477.dtsi"
++
++#define CAM1_PWDN		TEGRA_GPIO(S, 7)
++
++/ {
++    host1x {
++		i2c@546c0000 {
++			rbpcv3_imx477_a@1a {
++				status = "okay";
++				reset-gpios = <&gpio CAM1_PWDN GPIO_ACTIVE_HIGH>;
++			};
++		};
++	};
++
++    gpio@6000d000 {
++		camera-control-output-low {
++			gpio-hog;
++			output-low;
++			gpios = < CAM1_PWDN 0 >;
++			label = "cam1-pwdn";
++		};
++	};
++};
+Index: sources/hardware/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
+===================================================================
+--- sources.orig/hardware/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
++++ sources/hardware/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
+@@ -28,8 +28,8 @@
+ #include "porg-platforms/tegra210-pinmux-drive-sdmmc-common.dtsi"
+ #include "porg-platforms/tegra210-porg-pwm-fan.dtsi"
+ #include "porg-platforms/tegra210-porg-camera.dtsi"
+-#include "porg-platforms/tegra210-porg-camera-rbpcv2-imx219.dtsi"
+-#include "porg-platforms/tegra210-porg-camera-rbpcv2-dual-imx219.dtsi"
++#include "porg-platforms/tegra210-porg-camera-rbpcv3-imx477.dtsi"
++#include "porg-platforms/tegra210-porg-camera-rbpcv3-dual-imx477.dtsi"
+ #include <t210-common-platforms/tegra210-ers-hdmi-e2190-1100-a00.dtsi>
+ #include <t210-common-platforms/tegra210-dp.dtsi>
+ #include "porg-platforms/tegra210-porg-thermal.dtsi"
+Index: sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-plugin-manager/tegra210-porg-plugin-manager.dtsi
+===================================================================
+--- sources.orig/hardware/nvidia/platform/t210/porg/kernel-dts/porg-plugin-manager/tegra210-porg-plugin-manager.dtsi
++++ sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-plugin-manager/tegra210-porg-plugin-manager.dtsi
+@@ -185,9 +185,9 @@
+ 					non-removable;
+ 				};
+ 			};
+-			/* IMX219 single sensor module */
++			/* IMX477 single sensor module */
+ 			override@2 {
+-				target = <&imx219_single_cam0>;
++				target = <&imx477_single_cam0>;
+ 				_overlay_ {
+ 					status = "okay";
+ 				};
+@@ -196,7 +196,7 @@
+ 				target = <&cam_module0>;
+ 				_overlay_ {
+ 					status = "okay";
+-					badge = "porg_front_RBPCV2";
++					badge = "porg_front_RBPCV3";
+ 					position = "front";
+ 					orientation = "1";
+ 				};
+@@ -206,16 +206,8 @@
+ 				_overlay_ {
+ 					status = "okay";
+ 					pcl_id = "v4l2_sensor";
+-					devname = "imx219 6-0010";
+-					proc-device-tree = "/proc/device-tree/host1x/i2c@546c0000/rbpcv2_imx219_a@10";
+-				};
+-			};
+-			override@5 {
+-				target = <&cam_module0_drivernode1>;
+-				_overlay_ {
+-					status = "okay";
+-					pcl_id = "v4l2_lens";
+-					proc-device-tree = "/proc/device-tree/lens_imx219@RBPCV2/";
++					devname = "imx477 6-001a";
++					proc-device-tree = "/proc/device-tree/host1x/i2c@546c0000/rbpcv3_imx477_a@1a";
+ 				};
+ 			};
+ 			/* Enable VI ports */
+@@ -232,12 +224,12 @@
+ 				};
+ 			};
+ 			override@8 {
+-				target = <&rbpcv2_imx219_vi_in0>;
++				target = <&rbpcv3_imx477_vi_in0>;
+ 				_overlay_ {
+ 					status = "okay";
+ 					port-index = <0>;
+ 					bus-width = <2>;
+-					remote-endpoint = <&rbpcv2_imx219_csi_out0>;
++					remote-endpoint = <&rbpcv3_imx477_csi_out0>;
+ 				};
+ 			};
+ 			/* Enable CSI ports */
+@@ -260,12 +252,12 @@
+ 				};
+ 			};
+ 			override@12 {
+-				target = <&rbpcv2_imx219_csi_in0>;
++				target = <&rbpcv3_imx477_csi_in0>;
+ 				_overlay_ {
+ 					status = "okay";
+ 					port-index = <0>;
+ 					bus-width = <2>;
+-					remote-endpoint = <&rbpcv2_imx219_out0>;
++					remote-endpoint = <&rbpcv3_imx477_out0>;
+ 				};
+ 			};
+ 			override@13 {
+@@ -275,10 +267,10 @@
+ 				};
+ 			};
+ 			override@14 {
+-				target = <&rbpcv2_imx219_csi_out0>;
++				target = <&rbpcv3_imx477_csi_out0>;
+ 				_overlay_ {
+ 					status = "okay";
+-					remote-endpoint = <&rbpcv2_imx219_vi_in0>;
++					remote-endpoint = <&rbpcv3_imx477_vi_in0>;
+ 				};
+ 			};
+ 			/* tegra-camera-platform settings */
+@@ -342,9 +334,9 @@
+ 					status = "okay";
+ 				};
+ 			};
+-			/* IMX219 dual sensor module */
++			/* IMX477 dual sensor module */
+ 			override@4 {
+-				target = <&imx219_cam0>;
++				target = <&imx477_cam0>;
+ 				_overlay_ {
+ 					status = "okay";
+ 				};
+@@ -353,7 +345,7 @@
+ 				target = <&cam_module0>;
+ 				_overlay_ {
+ 					status = "okay";
+-					badge = "porg_front_RBPCV2";
++					badge = "porg_front_RBPCV3";
+ 					position = "front";
+ 					orientation = "1";
+ 				};
+@@ -363,20 +355,12 @@
+ 				_overlay_ {
+ 					status = "okay";
+ 					pcl_id = "v4l2_sensor";
+-					devname = "imx219 7-0010";
+-					proc-device-tree = "/proc/device-tree/cam_i2cmux/i2c@0/rbpcv2_imx219_a@10";
+-				};
+-			};
+-			override@7 {
+-				target = <&cam_module0_drivernode1>;
+-				_overlay_ {
+-					status = "okay";
+-					pcl_id = "v4l2_lens";
+-					proc-device-tree = "/proc/device-tree/lens_imx219@RBPCV2/";
++					devname = "imx477 7-001a";
++					proc-device-tree = "/proc/device-tree/cam_i2cmux/i2c@0/rbpcv3_imx477_a@1a";
+ 				};
+ 			};
+ 			override@8 {
+-				target = <&imx219_cam1>;
++				target = <&imx477_cam1>;
+ 				_overlay_ {
+ 					status = "okay";
+ 				};
+@@ -385,7 +369,7 @@
+ 				target = <&cam_module1>;
+ 				_overlay_ {
+ 					status = "okay";
+-					badge = "porg_rear_RBPCV2";
++					badge = "porg_rear_RBPCV3";
+ 					position = "rear";
+ 					orientation = "1";
+ 				};
+@@ -395,16 +379,8 @@
+ 				_overlay_ {
+ 					status = "okay";
+ 					pcl_id = "v4l2_sensor";
+-					devname = "imx219 8-0010";
+-					proc-device-tree = "/proc/device-tree/cam_i2cmux/i2c@1/rbpcv2_imx219_e@10";
+-				};
+-			};
+-			override@11 {
+-				target = <&cam_module1_drivernode1>;
+-				_overlay_ {
+-					status = "okay";
+-					pcl_id = "v4l2_lens";
+-					proc-device-tree = "/proc/device-tree/lens_imx219@RBPCV2/";
++					devname = "imx477 8-001a";
++					proc-device-tree = "/proc/device-tree/cam_i2cmux/i2c@1/rbpcv3_imx477_e@1a";
+ 				};
+ 			};
+ 			/* Enable VI ports */
+@@ -427,21 +403,21 @@
+ 				};
+ 			};
+ 			override@15 {
+-				target = <&rbpcv2_imx219_vi_in0>;
++				target = <&rbpcv3_imx477_vi_in0>;
+ 				_overlay_ {
+ 					status = "okay";
+ 					port-index = <0>;
+ 					bus-width = <2>;
+-					remote-endpoint = <&rbpcv2_imx219_csi_out0>;
++					remote-endpoint = <&rbpcv3_imx477_csi_out0>;
+ 				};
+ 			};
+ 			override@16 {
+-				target = <&rbpcv2_imx219_vi_in1>;
++				target = <&rbpcv3_imx477_vi_in1>;
+ 				_overlay_ {
+ 					status = "okay";
+ 					port-index = <4>;
+ 					bus-width = <2>;
+-					remote-endpoint = <&rbpcv2_imx219_csi_out1>;
++					remote-endpoint = <&rbpcv3_imx477_csi_out1>;
+ 				};
+ 			};
+ 			/* Enable CSI ports */
+@@ -464,12 +440,12 @@
+ 				};
+ 			};
+ 			override@20 {
+-				target = <&rbpcv2_imx219_csi_in0>;
++				target = <&rbpcv3_imx477_csi_in0>;
+ 				_overlay_ {
+ 					status = "okay";
+ 					port-index = <0>;
+ 					bus-width = <2>;
+-					remote-endpoint = <&rbpcv2_imx219_dual_out0>;
++					remote-endpoint = <&rbpcv3_imx477_dual_out0>;
+ 				};
+ 			};
+ 			override@21 {
+@@ -479,7 +455,7 @@
+ 				};
+ 			};
+ 			override@22 {
+-				target = <&rbpcv2_imx219_csi_out0>;
++				target = <&rbpcv3_imx477_csi_out0>;
+ 				_overlay_ {
+ 					status = "okay";
+ 				};
+@@ -497,12 +473,12 @@
+ 				};
+ 			};
+ 			override@25 {
+-				target = <&rbpcv2_imx219_csi_in1>;
++				target = <&rbpcv3_imx477_csi_in1>;
+ 				_overlay_ {
+ 					status = "okay";
+ 					port-index = <4>;
+ 					bus-width = <2>;
+-					remote-endpoint = <&rbpcv2_imx219_out1>;
++					remote-endpoint = <&rbpcv3_imx477_out1>;
+ 				};
+ 			};
+ 			override@26 {
+@@ -512,7 +488,7 @@
+ 				};
+ 			};
+ 			override@27 {
+-				target = <&rbpcv2_imx219_csi_out1>;
++				target = <&rbpcv3_imx477_csi_out1>;
+ 				_overlay_ {
+ 					status = "okay";
+ 				};
