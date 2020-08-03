@@ -13,7 +13,10 @@ In this repository you will find the following structure:
 .
 ├── li-camera-calibration-files
 │   └── camera_overrides.isp
-├── patches
+├── patches_nano
+│   ├── 4.4.3_l4t32.4.3_rbpv3_imx477_support.patch
+│   └── series
+├── patches_nx
 │   ├── 4.4.3_l4t32.4.3_rbpv3_imx477_support.patch
 │   └── series
 └── README.md
