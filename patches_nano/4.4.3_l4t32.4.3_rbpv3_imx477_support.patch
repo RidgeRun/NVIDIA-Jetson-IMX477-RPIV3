@@ -1911,7 +1911,7 @@ Index: sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegr
 +		};
 +		i2c_1: i2c@1 {
 +			imx477_cam1: rbpcv3_imx477_e@1a {
-+				compatible = "nvidia,imx477";
++				compatible = "ridgerun,imx477";
 +				/* I2C device address */
 +				reg = <0x1a>;
 +
