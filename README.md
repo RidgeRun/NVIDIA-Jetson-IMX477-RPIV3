@@ -27,11 +27,26 @@ where:
 * `series` is a file containing the patch name in order to apply it by using the quilt tool.
 * `camera_overrides.isp` is a file which contains a set of calibration parameters for the Image Signal Processor of the HQ camera.
 
-## Installation instructions
+## JetPack 4.4 installation instructions
+
+You can download and install the JetPack 4.4 by following the instructions below:
+
+* [JetPack 4.4 download and installation instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Download_the_JetPack_4.4)
+
+## Driver Installation instructions
+
+There are two options to install the driver:
+
+### OPTION A: Installing the kernel and dtb debians (Recommended)
+
+This is the easiest and fastest way to install the driver. In order to install the debian packages you just need to perform the following instructions:
+
+* [Installing the kernel and dtb debians](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Installing_the_Driver_-_Option_A:_Debian_Packages_.28Recommended.29)
+
+### OPTION B: Applying the patches on the sources
 
 In order to apply the patch on the JetPack 4.4 sources with Xavier NX and Nano support, you must perform the following instructions:
  
-* [JetPack 4.4 download and installation instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Download_the_JetPack_4.4)
 * [JetPack 4.4 sources download instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Download_the_JetPack_4.4_sources)
 * [Patch instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Patch_instructions)
 * [Kernel build instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Kernel_build_instructions)
