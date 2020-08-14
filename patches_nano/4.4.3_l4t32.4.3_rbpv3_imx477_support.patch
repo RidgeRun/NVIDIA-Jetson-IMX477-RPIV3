@@ -2542,24 +2542,24 @@ Index: sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegr
 +		#size-cells = <0>;
 +		mux-gpios = <&gpio CAM_I2C_MUX GPIO_ACTIVE_HIGH>;
 +		i2c-parent = <&i2c7>;
-+		status = "okay";
++		status = "disabled";
 +		i2c@0 {
-+			status = "okay";
++			status = "disabled";
 +			reg = <0>;
 +			#address-cells = <1>;
 +			#size-cells = <0>;
 +			rbpcv3_imx477_a@1a {
-+				status = "okay";
++				status = "disabled";
 +				reset-gpios = <&gpio CAM1_PWDN GPIO_ACTIVE_HIGH>;
 +			};
 +		};
 +		i2c@1 {
-+			status = "okay";
++			status = "disabled";
 +			reg = <1>;
 +			#address-cells = <1>;
 +			#size-cells = <0>;
 +			rbpcv3_imx477_e@1a {
-+				status = "okay";
++				status = "disabled";
 +				reset-gpios = <&gpio CAM2_PWDN GPIO_ACTIVE_HIGH>;
 +			};
 +		};
@@ -2604,7 +2604,7 @@ Index: sources/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegr
 +    host1x {
 +		i2c@546c0000 {
 +			rbpcv3_imx477_a@1a {
-+				status = "okay";
++				status = "disabled";
 +				reset-gpios = <&gpio CAM1_PWDN GPIO_ACTIVE_HIGH>;
 +			};
 +		};
