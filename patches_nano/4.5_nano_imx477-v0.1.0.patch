@@ -1,619 +1,7 @@
-From ace8c4eb8780a203eca33f189ee7947c6fb876a8 Mon Sep 17 00:00:00 2001
-From: dchvs <daniel.chaves@ridgerun.com>
-Date: Tue, 12 Jan 2021 16:45:16 -0600
-Subject: [PATCH] Squashed commit of the following:
-
-commit 3ebe94f901eb91708ba986682790f09faa0a7468
-Merge: 2d524ea9c 4d1b1ffa5
-Author: Daniel Chaves <75323587+dchvs@users.noreply.github.com>
-Date:   Tue Jan 12 12:43:07 2021 -0600
-
-    Merge pull request #16 from RidgeRun/4.4.1/evm/imx477-dev
-
-    4.4.1/evm/imx477 dev
-
-commit 4d1b1ffa56ad91ffeee143d5456a6731e70d78df
-Author: dchvs <daniel.chaves@ridgerun.com>
-Date:   Sun Jan 10 13:33:05 2021 -0600
-
-    Enable 2 cameras for Jetson Nano B01 revision
-
-commit a9c89fbb92b69b80aee5772d8a5baf6c90e648b1
-Author: Carlos Rodriguez <carlos.rodriguez@ridgerun.com>
-Date:   Mon Jul 27 09:29:54 2020 -0600
-
-    Add IMX477 RBPV3 HQ camera support
-
-    Resolutions:
-    - 1920x1080 up to 60 fps
-    - 4032x3040 up to 30 fps
----
- .../tegra194-camera-jakku-rbpcv3-imx477.dtsi  |  59 ++
- .../common/tegra194-camera-rbpcv3-imx477.dtsi | 369 ++++++++++++
- .../common/tegra194-p3509-0000-a00.dtsi       | 116 ++++
- .../tegra210-camera-rbpcv3-dual-imx477.dtsi   | 559 ++++++++++++++++++
- .../tegra210-camera-rbpcv3-imx477.dtsi        | 324 ++++++++++
- ...gra210-porg-camera-rbpcv3-dual-imx477.dtsi |  62 ++
- .../tegra210-porg-camera-rbpcv3-imx477.dtsi   |  40 ++
- .../tegra210-porg-plugin-manager.dtsi         | 120 ++--
- .../tegra210-porg-p3448-common.dtsi           |   4 +-
- kernel/nvidia/drivers/media/i2c/imx477.c      |  24 +-
- 10 files changed, 1616 insertions(+), 61 deletions(-)
- create mode 100644 hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-jakku-rbpcv3-imx477.dtsi
- create mode 100644 hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-rbpcv3-imx477.dtsi
- create mode 100644 hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi
- create mode 100644 hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi
- create mode 100644 hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi
- create mode 100644 hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-dual-imx477.dtsi
- create mode 100644 hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-imx477.dtsi
-
-diff --git a/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-jakku-rbpcv3-imx477.dtsi b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-jakku-rbpcv3-imx477.dtsi
-new file mode 100644
-index 000000000..9a034f5c9
+Index: nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi
+===================================================================
 --- /dev/null
-+++ b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-jakku-rbpcv3-imx477.dtsi
-@@ -0,0 +1,59 @@
-+/*
-+ * Copyright (c) 2020, RidgeRun.  All rights reserved.
-+ *
-+ * Contact us: support@ridgerun.com
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ *
-+ * This program is distributed in the hope that it will be useful, but WITHOUT
-+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-+ * more details.
-+ *
-+ * You should have received a copy of the GNU General Public License
-+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ */
-+
-+#include "tegra194-camera-rbpcv3-imx477.dtsi"
-+
-+#define CAM0_PWDN	TEGRA194_MAIN_GPIO(P, 4)
-+#define CAM1_PWDN	TEGRA194_MAIN_GPIO(P, 5)
-+#define CAM_I2C_MUX 	TEGRA194_AON_GPIO(CC, 3)
-+
-+/ {
-+	cam_i2cmux{
-+		compatible = "i2c-mux-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-parent = <&cam_i2c>;
-+		mux-gpios = <&tegra_aon_gpio CAM_I2C_MUX GPIO_ACTIVE_HIGH>;
-+		i2c@0 {
-+			reg = <0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+            		rbpcv3_imx477_a@1a {
-+				reset-gpios = <&tegra_main_gpio CAM0_PWDN GPIO_ACTIVE_HIGH>;
-+			};
-+		};
-+		i2c@1 {
-+			reg = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			rbpcv3_imx477_c@1a {
-+				reset-gpios = <&tegra_main_gpio CAM1_PWDN GPIO_ACTIVE_HIGH>;
-+			};
-+		};
-+	};
-+
-+	gpio@2200000 {
-+		camera-control-output-low {
-+			gpio-hog;
-+			output-low;
-+			gpios = <CAM0_PWDN 0 CAM1_PWDN 0>;
-+			label = "cam0-pwdn","cam1-pwdn";
-+		};
-+	};
-+};
-diff --git a/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-rbpcv3-imx477.dtsi b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-rbpcv3-imx477.dtsi
-new file mode 100644
-index 000000000..3b38727cd
---- /dev/null
-+++ b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-camera-rbpcv3-imx477.dtsi
-@@ -0,0 +1,369 @@
-+/*
-+ * Copyright (c) 2020, RidgeRun.  All rights reserved.
-+ *
-+ * Contact us: support@ridgerun.com
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ *
-+ * This program is distributed in the hope that it will be useful, but WITHOUT
-+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-+ * more details.
-+ *
-+ * You should have received a copy of the GNU General Public License
-+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ */
-+#include <dt-bindings/media/camera.h>
-+
-+/ {
-+	host1x {
-+		vi@15c10000  {
-+			num-channels = <2>;
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				vi_port0: port@0 {
-+					reg = <0>;
-+					rbpcv3_imx477_vi_in0: endpoint {
-+						status = "okay";
-+						port-index = <0>;
-+						bus-width = <2>;
-+						remote-endpoint = <&rbpcv3_imx477_csi_out0>;
-+					};
-+				};
-+				vi_port1: port@1 {
-+					reg = <1>;
-+					rbpcv3_imx477_vi_in1: endpoint {
-+						status = "okay";
-+						port-index = <2>;
-+						bus-width = <2>;
-+						remote-endpoint = <&rbpcv3_imx477_csi_out1>;
-+					};
-+				};
-+			};
-+		};
-+
-+		nvcsi@15a00000 {
-+			num-channels = <2>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			csi_chan0: channel@0 {
-+				reg = <0>;
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					csi_chan0_port0: port@0 {
-+						reg = <0>;
-+						status = "okay";
-+						rbpcv3_imx477_csi_in0: endpoint@0 {
-+							port-index = <0>;
-+							bus-width = <2>;
-+							remote-endpoint = <&rbpcv3_imx477_out0>;
-+						};
-+					};
-+					csi_chan0_port1: port@1 {
-+						reg = <1>;
-+						status = "okay";
-+						rbpcv3_imx477_csi_out0: endpoint@1 {
-+							status = "okay";
-+							remote-endpoint = <&rbpcv3_imx477_vi_in0>;
-+						};
-+					};
-+				};
-+			};
-+			csi_chan1: channel@1 {
-+				reg = <1>;
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					csi_chan1_port0: port@0 {
-+						reg = <0>;
-+						rbpcv3_imx477_csi_in1: endpoint@2 {
-+							port-index = <2>;
-+							bus-width = <2>;
-+							status = "okay";
-+							remote-endpoint = <&rbpcv3_imx477_out1>;
-+						};
-+					};
-+					csi_chan1_port1: port@1 {
-+						reg = <1>;
-+						status = "okay";
-+						rbpcv3_imx477_csi_out1: endpoint@3 {
-+							remote-endpoint = <&rbpcv3_imx477_vi_in1>;
-+						};
-+					};
-+				};
-+			};
-+		};
-+	};
-+
-+	cam_i2cmux {
-+		i2c_0:i2c@0 {
-+			imx477_cam0: rbpcv3_imx477_a@1a {
-+				compatible = "ridgerun,imx477";
-+				/* I2C device address */
-+				reg = <0x1a>;
-+
-+				/* V4L2 device node location */
-+				devnode = "video0";
-+
-+				/* Physical dimensions of sensor */
-+				physical_w = "7.564";
-+				physical_h = "5.476";
-+
-+				sensor_model = "imx477";
-+
-+				use_sensor_mode_id = "true";
-+
-+				mode0 { /* IMX477_MODE_4032X3040 */
-+					mclk_khz = "24000";
-+					num_lanes = "2";
-+					tegra_sinterface = "serial_a";
-+					phy_mode = "DPHY";
-+					discontinuous_clk = "no";
-+					dpcm_enable = "false";
-+					cil_settletime = "0";
-+
-+					active_w = "4032";
-+					active_h = "3040";
-+					mode_type = "bayer";
-+					pixel_phase = "rggb";
-+					csi_pixel_bit_depth = "10";
-+					readout_orientation = "90";
-+					line_length = "9024";
-+					inherent_gain = "1";
-+					mclk_multiplier = "80";
-+					pix_clk_hz = "840000000";
-+
-+					gain_factor = "16";
-+					framerate_factor = "1000000";
-+					exposure_factor = "1000000";
-+					min_gain_val = "16"; /* 1.00x */
-+					max_gain_val = "356"; /* 22x */
-+					step_gain_val = "1";
-+					default_gain = "16"; /* 1.00x */
-+					min_hdr_ratio = "1";
-+					max_hdr_ratio = "1";
-+					min_framerate = "2000000"; /* 2.0 fps */
-+					max_framerate = "30000000"; /* 30.0 fps */
-+					step_framerate = "1";
-+					default_framerate = "30000000"; /* 30.0 fps */
-+					min_exp_time = "13"; /* us */
-+					max_exp_time = "683709"; /* us */
-+					step_exp_time = "1";
-+					default_exp_time = "2495"; /* us */
-+
-+					embedded_metadata_height = "2";
-+				};
-+				mode1 { /* IMX477_MODE_1920X1080 */
-+					mclk_khz = "24000";
-+					num_lanes = "2";
-+					tegra_sinterface = "serial_a";
-+					phy_mode = "DPHY";
-+					discontinuous_clk = "no";
-+					dpcm_enable = "false";
-+					cil_settletime = "0";
-+
-+					active_w = "1920";
-+					active_h = "1080";
-+					mode_type = "bayer";
-+					pixel_phase = "rggb";
-+					csi_pixel_bit_depth = "10";
-+					readout_orientation = "90";
-+					line_length = "9024";
-+					inherent_gain = "1";
-+					mclk_multiplier = "80";
-+					pix_clk_hz = "840000000";
-+
-+					gain_factor = "16";
-+					framerate_factor = "1000000";
-+					exposure_factor = "1000000";
-+					min_gain_val = "16"; /* 1.00x */
-+					max_gain_val = "356"; /* 22x */
-+					step_gain_val = "1";
-+					default_gain = "16"; /* 1.00x */
-+					min_hdr_ratio = "1";
-+					max_hdr_ratio = "1";
-+					min_framerate = "2000000"; /* 2.0 fps */
-+					max_framerate = "60000000"; /* 60.0 fps */
-+					step_framerate = "1";
-+					default_framerate = "60000000"; /* 60.0 fps */
-+					min_exp_time = "13"; /* us */
-+					max_exp_time = "683709"; /* us */
-+					step_exp_time = "1";
-+					default_exp_time = "2495"; /* us */
-+
-+					embedded_metadata_height = "2";
-+				};
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					port@0 {
-+						reg = <0>;
-+						rbpcv3_imx477_out0: endpoint {
-+							port-index = <0>;
-+							bus-width = <2>;
-+							remote-endpoint = <&rbpcv3_imx477_csi_in0>;
-+						};
-+					};
-+				};
-+			};
-+		};
-+		i2c_1: i2c@1 {
-+			imx477_cam1: rbpcv3_imx477_c@1a {
-+				compatible = "ridgerun,imx477";
-+				/* I2C device address */
-+				reg = <0x1a>;
-+
-+				/* V4L2 device node location */
-+				devnode = "video1";
-+
-+				/* Physical dimensions of sensor */
-+				physical_w = "7.564";
-+				physical_h = "5.476";
-+
-+				sensor_model = "imx477";
-+
-+				use_sensor_mode_id = "true";
-+
-+				mode0 { /* IMX477_MODE_4032X3040 */
-+					mclk_khz = "24000";
-+					num_lanes = "2";
-+					tegra_sinterface = "serial_c";
-+					phy_mode = "DPHY";
-+					discontinuous_clk = "no";
-+					dpcm_enable = "false";
-+					cil_settletime = "0";
-+
-+					active_w = "4032";
-+					active_h = "3040";
-+					mode_type = "bayer";
-+					pixel_phase = "rggb";
-+					csi_pixel_bit_depth = "10";
-+					readout_orientation = "90";
-+					line_length = "9024";
-+					inherent_gain = "1";
-+					mclk_multiplier = "80";
-+					pix_clk_hz = "840000000";
-+
-+					gain_factor = "16";
-+					framerate_factor = "1000000";
-+					exposure_factor = "1000000";
-+					min_gain_val = "16"; /* 1.00x */
-+					max_gain_val = "356"; /* 22x */
-+					step_gain_val = "1";
-+					default_gain = "16"; /* 1.00x */
-+					min_hdr_ratio = "1";
-+					max_hdr_ratio = "1";
-+					min_framerate = "2000000"; /* 2.0 fps */
-+					max_framerate = "30000000"; /* 30.0 fps */
-+					step_framerate = "1";
-+					default_framerate = "30000000"; /* 30.0 fps */
-+					min_exp_time = "13"; /* us */
-+					max_exp_time = "683709"; /* us */
-+					step_exp_time = "1";
-+					default_exp_time = "2495"; /* us */
-+
-+					embedded_metadata_height = "2";
-+				};
-+				mode1 { /* IMX477_MODE_1920X1080 */
-+					mclk_khz = "24000";
-+					num_lanes = "2";
-+					tegra_sinterface = "serial_c";
-+					phy_mode = "DPHY";
-+					discontinuous_clk = "no";
-+					dpcm_enable = "false";
-+					cil_settletime = "0";
-+
-+					active_w = "1920";
-+					active_h = "1080";
-+					mode_type = "bayer";
-+					pixel_phase = "rggb";
-+					csi_pixel_bit_depth = "10";
-+					readout_orientation = "90";
-+					line_length = "9024";
-+					inherent_gain = "1";
-+					mclk_multiplier = "80";
-+					pix_clk_hz = "840000000";
-+
-+					gain_factor = "16";
-+					framerate_factor = "1000000";
-+					exposure_factor = "1000000";
-+					min_gain_val = "16"; /* 1.00x */
-+					max_gain_val = "356"; /* 22x */
-+					step_gain_val = "1";
-+					default_gain = "16"; /* 1.00x */
-+					min_hdr_ratio = "1";
-+					max_hdr_ratio = "1";
-+					min_framerate = "2000000"; /* 2.0 fps */
-+					max_framerate = "60000000"; /* 60.0 fps */
-+					step_framerate = "1";
-+					default_framerate = "60000000"; /* 60.0 fps */
-+					min_exp_time = "13"; /* us */
-+					max_exp_time = "683709"; /* us */
-+					step_exp_time = "1";
-+					default_exp_time = "2495"; /* us */
-+
-+					embedded_metadata_height = "2";
-+				};
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					port@0 {
-+						reg = <0>;
-+						rbpcv3_imx477_out1: endpoint {
-+							port-index = <2>;
-+							bus-width = <2>;
-+							remote-endpoint = <&rbpcv3_imx477_csi_in1>;
-+						};
-+					};
-+				};
-+			};
-+		};
-+	};
-+};
-+/ {
-+	tcp: tegra-camera-platform {
-+		compatible = "nvidia, tegra-camera-platform";
-+		num_csi_lanes = <4>;
-+		max_lane_speed = <1500000>;
-+		min_bits_per_pixel = <10>;
-+		vi_peak_byte_per_pixel = <2>;
-+		vi_bw_margin_pct = <25>;
-+		max_pixel_rate = <7500000>;
-+		isp_peak_byte_per_pixel = <5>;
-+		isp_bw_margin_pct = <25>;
-+
-+		modules {
-+			cam_module0: module0 {
-+				badge = "jakku_front_RBP194";
-+				position = "front";
-+				orientation = "1";
-+				status = "okay";
-+				cam_module0_drivernode0: drivernode0 {
-+					status = "okay";
-+					pcl_id = "v4l2_sensor";
-+					devname = "imx477 9-001a";
-+					proc-device-tree = "/proc/device-tree/cam_i2cmux/i2c@0/rbpcv3_imx477_a@1a";
-+				};
-+			};
-+			cam_module1: module1 {
-+				badge = "jakku_rear_RBP194";
-+				position = "rear";
-+				orientation = "1";
-+				status = "okay";
-+				cam_module1_drivernode0: drivernode0 {
-+					status = "okay";
-+					pcl_id = "v4l2_sensor";
-+					devname = "imx477 10-001a";
-+					proc-device-tree = "/proc/device-tree/cam_i2cmux/i2c@1/rbpcv3_imx477_c@1a";
-+				};
-+			};
-+		};
-+	};
-+};
-diff --git a/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi
-new file mode 100644
-index 000000000..0d30d57fb
---- /dev/null
-+++ b/hardware/nvidia/platform/t19x/jakku/kernel-dts/common/tegra194-p3509-0000-a00.dtsi
-@@ -0,0 +1,116 @@
-+/*
-+ * Copyright (c) 2019, NVIDIA CORPORATION.  All rights reserved.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; version 2 of the License.
-+ *
-+ * This program is distributed in the hope that it will be useful, but WITHOUT
-+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-+ * more details.
-+ */
-+#include <dt-bindings/gpio/tegra194-gpio.h>
-+#include "dt-bindings/input/input.h"
-+#include "tegra194-fixed-regulator-p3509-0000-a00.dtsi"
-+#include "tegra194-p3509-disp.dtsi"
-+#include "tegra194-audio-p3668.dtsi"
-+#include "tegra194-super-module-e2614-p3509.dtsi"
-+#include "tegra194-camera-jakku-rbpcv3-imx477.dtsi"
-+/ {
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		gpio-keys,name = "gpio-keys";
-+
-+		forcerecovery {
-+			label = "force-recovery";
-+			gpios = <&tegra_main_gpio TEGRA194_MAIN_GPIO(G, 0) GPIO_ACTIVE_LOW>;
-+			linux,code = <BTN_1>;
-+		};
-+
-+		power_key {
-+			label = "power-key";
-+			gpios = <&tegra_aon_gpio TEGRA194_AON_GPIO(EE, 4) GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_POWER>;
-+			gpio-key,wakeup;
-+		};
-+	};
-+	eeprom-manager {
-+		data-size = <0x100>;
-+		bus@0 {
-+			i2c-bus = <&gen1_i2c>;
-+			eeprom@1 {
-+				slave-address = <0x57>;
-+				label = "cvb";
-+			};
-+		};
-+
-+		bus@1 {
-+			i2c-bus = <&gen2_i2c>;
-+			eeprom@1 {
-+				slave-address = <0x50>;
-+				label = "super-module";
-+			};
-+		};
-+	};
-+	pwm-fan {
-+		pwms = <&tegra_pwm6 0 45334>;
-+		vdd-fan-supply = <&p3509_vdd_fan>;
-+		profiles {
-+			default = "quiet";
-+			quiet {
-+				state_cap = <4>;
-+				active_pwm = <0 130 160 200 255 255 255 255 255 255>;
-+			};
-+			cool {
-+				state_cap = <4>;
-+				active_pwm = <0 140 170 200 255 255 255 255 255 255>;
-+			};
-+		};
-+	};
-+	thermal-fan-est {
-+		profiles {
-+			default = "quiet";
-+			quiet {
-+				active_trip_temps = <0 46000 60000 68000 76000
-+						140000 150000 160000 170000 180000>;
-+				active_hysteresis = <0 8000 8000 7000 7000
-+						0 0 0 0 0>;
-+			};
-+			cool {
-+				active_trip_temps = <0 35000 45000 53000 61000
-+						140000 150000 160000 170000 180000>;
-+				active_hysteresis = <0 8000 8000 7000 7000
-+						0 0 0 0 0>;
-+			};
-+		};
-+	};
-+	serial@3110000 {
-+		status = "okay";
-+	};
-+	tachometer@39c0000 {
-+		status = "okay";
-+	};
-+	pwm@3280000 {
-+		status = "okay";
-+	};
-+
-+	pwm@32c0000 {
-+		status = "okay";
-+	};
-+
-+	pwm@32d0000 {
-+		status = "okay";
-+	};
-+
-+	pwm@32f0000 {
-+		status = "okay";
-+	};
-+	spi@c260000 {
-+		status = "disabled";
-+	};
-+
-+	spi@3300000 {
-+		status = "disabled";
-+	};
-+};
-diff --git a/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi b/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi
-new file mode 100644
-index 000000000..5a9358f89
---- /dev/null
-+++ b/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi
++++ nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-dual-imx477.dtsi
 @@ -0,0 +1,559 @@
 +/*
 + * Copyright (c) 2018-2019, NVIDIA CORPORATION.  All rights reserved.
@@ -842,8 +230,8 @@ index 000000000..5a9358f89
 +					max_framerate = "30000000"; /* 30.0 fps */
 +					step_framerate = "1";
 +					default_framerate = "30000000"; /* 30.0 fps */
-+					min_exp_time = "13"; /* us */
-+					max_exp_time = "683709"; /* us */
++					min_exp_time = "11"; /* us */
++					max_exp_time = "500000"; /* us */
 +					step_exp_time = "1";
 +					default_exp_time = "2495"; /* us */
 +
@@ -882,8 +270,8 @@ index 000000000..5a9358f89
 +					max_framerate = "60000000"; /* 60.0 fps */
 +					step_framerate = "1";
 +					default_framerate = "60000000"; /* 60.0 fps */
-+					min_exp_time = "13"; /* us */
-+					max_exp_time = "683709"; /* us */
++					min_exp_time = "11"; /* us */
++					max_exp_time = "500000"; /* us */
 +					step_exp_time = "1";
 +					default_exp_time = "2495"; /* us */
 +
@@ -907,7 +295,7 @@ index 000000000..5a9358f89
 +		};
 +		i2c_1: i2c@1 {
 +			imx477_cam1: rbpcv3_imx477_e@1a {
-+				compatible = "nvidia,imx477";
++				compatible = "ridgerun,imx477";
 +				/* I2C device address */
 +				reg = <0x1a>;
 +
@@ -1036,8 +424,8 @@ index 000000000..5a9358f89
 +					max_framerate = "30000000"; /* 30.0 fps */
 +					step_framerate = "1";
 +					default_framerate = "30000000"; /* 30.0 fps */
-+					min_exp_time = "13"; /* us */
-+					max_exp_time = "683709"; /* us */
++					min_exp_time = "11"; /* us */
++					max_exp_time = "500000"; /* us */
 +					step_exp_time = "1";
 +					default_exp_time = "2495"; /* us */
 +
@@ -1076,8 +464,8 @@ index 000000000..5a9358f89
 +					max_framerate = "60000000"; /* 60.0 fps */
 +					step_framerate = "1";
 +					default_framerate = "60000000"; /* 60.0 fps */
-+					min_exp_time = "13"; /* us */
-+					max_exp_time = "683709"; /* us */
++					min_exp_time = "11"; /* us */
++					max_exp_time = "500000"; /* us */
 +					step_exp_time = "1";
 +					default_exp_time = "2495"; /* us */
 +
@@ -1174,11 +562,10 @@ index 000000000..5a9358f89
 +		};
 +	};
 +};
-diff --git a/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi b/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi
-new file mode 100644
-index 000000000..c274178f8
+Index: nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi
+===================================================================
 --- /dev/null
-+++ b/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi
++++ nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-camera-rbpcv3-imx477.dtsi
 @@ -0,0 +1,324 @@
 +/*
 + * Copyright (c) 2018-2019, NVIDIA CORPORATION.  All rights reserved.
@@ -1376,8 +763,8 @@ index 000000000..c274178f8
 +					max_framerate = "30000000"; /* 30.0 fps */
 +					step_framerate = "1";
 +					default_framerate = "30000000"; /* 30.0 fps */
-+					min_exp_time = "13"; /* us */
-+					max_exp_time = "683709"; /* us */
++					min_exp_time = "11"; /* us */
++					max_exp_time = "500000"; /* us */
 +					step_exp_time = "1";
 +					default_exp_time = "2495"; /* us */
 +
@@ -1416,8 +803,8 @@ index 000000000..c274178f8
 +					max_framerate = "60000000"; /* 60.0 fps */
 +					step_framerate = "1";
 +					default_framerate = "60000000"; /* 60.0 fps */
-+					min_exp_time = "13"; /* us */
-+					max_exp_time = "683709"; /* us */
++					min_exp_time = "11"; /* us */
++					max_exp_time = "500000"; /* us */
 +					step_exp_time = "1";
 +					default_exp_time = "2495"; /* us */
 +
@@ -1504,11 +891,10 @@ index 000000000..c274178f8
 +		};
 +	};
 +};
-diff --git a/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-dual-imx477.dtsi b/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-dual-imx477.dtsi
-new file mode 100644
-index 000000000..6fd9db28a
+Index: nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-dual-imx477.dtsi
+===================================================================
 --- /dev/null
-+++ b/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-dual-imx477.dtsi
++++ nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-dual-imx477.dtsi
 @@ -0,0 +1,62 @@
 +/*
 + * Copyright (c) 2018-2019, NVIDIA CORPORATION.  All rights reserved.
@@ -1542,7 +928,7 @@ index 000000000..6fd9db28a
 +		i2c-parent = <&i2c7>;
 +		status = "disable";
 +		i2c@0 {
-+                       status = "disable";
++			status = "disable";
 +			reg = <0>;
 +			#address-cells = <1>;
 +			#size-cells = <0>;
@@ -1552,7 +938,7 @@ index 000000000..6fd9db28a
 +			};
 +		};
 +		i2c@1 {
-+                       status = "disable";
++			status = "disable";
 +			reg = <1>;
 +			#address-cells = <1>;
 +			#size-cells = <0>;
@@ -1572,11 +958,10 @@ index 000000000..6fd9db28a
 +		};
 +	};
 +};
-diff --git a/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-imx477.dtsi b/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-imx477.dtsi
-new file mode 100644
-index 000000000..aeb09d65a
+Index: nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-imx477.dtsi
+===================================================================
 --- /dev/null
-+++ b/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-imx477.dtsi
++++ nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/porg-platforms/tegra210-porg-camera-rbpcv3-imx477.dtsi
 @@ -0,0 +1,40 @@
 +/*
 + * Copyright (c) 2018-2019, NVIDIA CORPORATION.  All rights reserved.
@@ -1603,7 +988,7 @@ index 000000000..aeb09d65a
 +    host1x {
 +		i2c@546c0000 {
 +			rbpcv3_imx477_a@1a {
-+		                status = "disable";
++				status = "disable";
 +				reset-gpios = <&gpio CAM1_PWDN GPIO_ACTIVE_HIGH>;
 +			};
 +		};
@@ -1618,10 +1003,10 @@ index 000000000..aeb09d65a
 +		};
 +	};
 +};
-diff --git a/hardware/nvidia/platform/t210/porg/kernel-dts/porg-plugin-manager/tegra210-porg-plugin-manager.dtsi b/hardware/nvidia/platform/t210/porg/kernel-dts/porg-plugin-manager/tegra210-porg-plugin-manager.dtsi
-index 93ec6e387..34a57a27f 100644
---- a/hardware/nvidia/platform/t210/porg/kernel-dts/porg-plugin-manager/tegra210-porg-plugin-manager.dtsi
-+++ b/hardware/nvidia/platform/t210/porg/kernel-dts/porg-plugin-manager/tegra210-porg-plugin-manager.dtsi
+Index: nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/porg-plugin-manager/tegra210-porg-plugin-manager.dtsi
+===================================================================
+--- nano-drivers.orig/hardware/nvidia/platform/t210/porg/kernel-dts/porg-plugin-manager/tegra210-porg-plugin-manager.dtsi
++++ nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/porg-plugin-manager/tegra210-porg-plugin-manager.dtsi
 @@ -185,9 +185,9 @@
  					non-removable;
  				};
@@ -1705,47 +1090,11 @@ index 93ec6e387..34a57a27f 100644
  				};
  			};
  			/* tegra-camera-platform settings */
-@@ -307,8 +299,46 @@
+@@ -306,9 +298,9 @@
+ 		fragement@10 {
  			ids = ">=3448-0000-300", ">=3448-0002-300";
  
- 			/* IMX219 dual sensor module */
-+			override@0 {
-+				target = <&{/pcie@1003000/pci@2,0}>;
-+				_overlay_ {
-+					nvidia,plat-gpios = <&gpio TEGRA_GPIO(CC, 7) GPIO_ACTIVE_HIGH>;
-+				};
-+			};
-+			override@1 {
-+				target = <&sdhci2>;
-+				_overlay_ {
-+					vqmmc-supply = <&max77620_ldo6>;
-+					no-sdio;
-+					no-mmc;
-+					sd-uhs-sdr104;
-+					sd-uhs-sdr50;
-+					sd-uhs-sdr25;
-+					sd-uhs-sdr12;
-+				};
-+			};
-+			override@2 {
-+				target = <&throttle_oc1>;
-+				_overlay_ {
-+					nvidia,priority = <50>;
-+					nvidia,polarity-active-low = <1>;
-+					nvidia,count-threshold = <1>;
-+					nvidia,alarm-filter = <5100000>;
-+					nvidia,alarm-period = <0>;
-+					nvidia,cpu-throt-percent = <75>;
-+					nvidia,gpu-throt-level =
-+						<TEGRA_SOCTHERM_THROT_LEVEL_HIGH>;
-+				};
-+			};
-+			override@3 {
-+				target = <&{/leds}>;
-+				_overlay_ {
-+					status = "okay";
-+				};
-+			};
+-			/* IMX219 dual sensor module */
 +			/* IMX477 dual sensor module */
  			override@4 {
 -				target = <&imx219_cam0>;
@@ -1753,7 +1102,7 @@ index 93ec6e387..34a57a27f 100644
  				_overlay_ {
  					status = "okay";
  				};
-@@ -317,7 +347,7 @@
+@@ -317,7 +309,7 @@
  				target = <&cam_module0>;
  				_overlay_ {
  					status = "okay";
@@ -1762,7 +1111,7 @@ index 93ec6e387..34a57a27f 100644
  					position = "front";
  					orientation = "1";
  				};
-@@ -327,20 +357,12 @@
+@@ -327,20 +319,12 @@
  				_overlay_ {
  					status = "okay";
  					pcl_id = "v4l2_sensor";
@@ -1786,7 +1135,7 @@ index 93ec6e387..34a57a27f 100644
  				_overlay_ {
  					status = "okay";
  				};
-@@ -349,7 +371,7 @@
+@@ -349,7 +333,7 @@
  				target = <&cam_module1>;
  				_overlay_ {
  					status = "okay";
@@ -1795,7 +1144,7 @@ index 93ec6e387..34a57a27f 100644
  					position = "rear";
  					orientation = "1";
  				};
-@@ -359,16 +381,8 @@
+@@ -359,16 +343,8 @@
  				_overlay_ {
  					status = "okay";
  					pcl_id = "v4l2_sensor";
@@ -1814,7 +1163,7 @@ index 93ec6e387..34a57a27f 100644
  				};
  			};
  			/* Enable VI ports */
-@@ -391,21 +405,21 @@
+@@ -391,21 +367,21 @@
  				};
  			};
  			override@15 {
@@ -1840,7 +1189,7 @@ index 93ec6e387..34a57a27f 100644
  				};
  			};
  			/* Enable CSI ports */
-@@ -428,12 +442,12 @@
+@@ -428,12 +404,12 @@
  				};
  			};
  			override@20 {
@@ -1855,7 +1204,7 @@ index 93ec6e387..34a57a27f 100644
  				};
  			};
  			override@21 {
-@@ -443,7 +457,7 @@
+@@ -443,7 +419,7 @@
  				};
  			};
  			override@22 {
@@ -1864,7 +1213,7 @@ index 93ec6e387..34a57a27f 100644
  				_overlay_ {
  					status = "okay";
  				};
-@@ -461,12 +475,12 @@
+@@ -461,12 +437,12 @@
  				};
  			};
  			override@25 {
@@ -1879,7 +1228,7 @@ index 93ec6e387..34a57a27f 100644
  				};
  			};
  			override@26 {
-@@ -476,7 +490,7 @@
+@@ -476,7 +452,7 @@
  				};
  			};
  			override@27 {
@@ -1888,10 +1237,10 @@ index 93ec6e387..34a57a27f 100644
  				_overlay_ {
  					status = "okay";
  				};
-diff --git a/hardware/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi b/hardware/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
-index 57cb90cb7..76e505b1c 100644
---- a/hardware/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
-+++ b/hardware/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
+Index: nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
+===================================================================
+--- nano-drivers.orig/hardware/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
++++ nano-drivers/hardware/nvidia/platform/t210/porg/kernel-dts/tegra210-porg-p3448-common.dtsi
 @@ -28,8 +28,8 @@
  #include "porg-platforms/tegra210-pinmux-drive-sdmmc-common.dtsi"
  #include "porg-platforms/tegra210-porg-pwm-fan.dtsi"
@@ -1903,70 +1252,77 @@ index 57cb90cb7..76e505b1c 100644
  #include <t210-common-platforms/tegra210-ers-hdmi-e2190-1100-a00.dtsi>
  #include <t210-common-platforms/tegra210-dp.dtsi>
  #include <t210-common-platforms/tegra210-thermal-userspace-alert.dtsi>
-diff --git a/kernel/nvidia/drivers/media/i2c/imx477.c b/kernel/nvidia/drivers/media/i2c/imx477.c
-index 8f436bb1e..99ca7cee5 100644
---- a/kernel/nvidia/drivers/media/i2c/imx477.c
-+++ b/kernel/nvidia/drivers/media/i2c/imx477.c
-@@ -35,7 +35,8 @@
- #include "imx477_mode_tbls.h"
- 
- static const struct of_device_id imx477_of_match[] = {
--	{.compatible = "ridgerun,imx477",},
-+       {.compatible = "ridgerun,imx477"},
-+       {.compatible = "nvidia,imx477"},
- 	{},
- };
- 
-@@ -368,9 +369,9 @@ skip_power_seqn:
- 			gpio_set_value(pw->reset_gpio, 1);
- 	}
- 
--	/* Need to wait for t4 + t5 + t9 + t10 time as per the data sheet */
--	/* t4 - 200us, t5 - 21.2ms, t9 - 1.2ms t10 - 270 ms */
--	usleep_range(300000, 300100);
-+	/* Need to wait for t4 + t5 + t9 time as per the data sheet */
-+	/* t4 - 200us, t5 - 21.2ms, t9 - 1.2ms */
-+	usleep_range(23000, 23100);
- 
- 	pw->state = SWITCH_ON;
- 
-@@ -637,16 +638,23 @@ static struct camera_common_sensor_ops imx477_common_ops = {
- static int imx477_board_setup(struct imx477 *priv)
- {
- 	struct camera_common_data *s_data = priv->s_data;
-+	struct camera_common_pdata *pdata = s_data->pdata;
- 	struct device *dev = s_data->dev;
- 	u8 reg_val[2];
+Index: nano-drivers/kernel/nvidia/drivers/media/i2c/imx477.c
+===================================================================
+--- nano-drivers.orig/kernel/nvidia/drivers/media/i2c/imx477.c
++++ nano-drivers/kernel/nvidia/drivers/media/i2c/imx477.c
+@@ -259,46 +259,54 @@ static int imx477_set_exposure(struct te
+ 	struct device *dev = tc_dev->dev;
+ 	const struct sensor_mode_properties *mode =
+ 	    &s_data->sensor_props.sensor_modes[s_data->mode_prop_idx];
+-
  	int err = 0;
++	int i = 0;
+ 	imx477_reg ct_regs[2];
+ 	const s32 max_coarse_time = priv->frame_length - IMX477_MAX_COARSE_DIFF;
+-	const s32 fine_integ_time_factor = priv->fine_integ_time *
+-	    mode->control_properties.exposure_factor /
+-	    mode->signal_properties.pixel_clock.val;
+-	u32 coarse_time;
+-	int i;
++	u32 coarse_time = 0;
++	u32 fine_int_time = 0;
++	u32 int_factor = val * mode->signal_properties.pixel_clock.val /
++	    mode->control_properties.exposure_factor;
++
++	coarse_time = int_factor / mode->image_properties.line_length;
++	fine_int_time = int_factor % mode->image_properties.line_length;
  
--	// Skip mclk enable as this camera has an internal oscillator
-+	if (pdata->mclk_name) {
-+		err = camera_common_mclk_enable(s_data);
-+		if (err) {
-+			dev_err(dev, "error turning on mclk (%d)\n", err);
-+			goto done;
-+		}
-+	}
+ 	dev_dbg(dev, "%s: Setting exposure control to: %lld\n", __func__, val);
  
- 	err = imx477_power_on(s_data);
- 	if (err) {
- 		dev_err(dev, "error during power on sensor (%d)\n", err);
--		goto done;
-+		goto err_power_on;
+-	coarse_time = (val - fine_integ_time_factor)
+-	    * mode->signal_properties.pixel_clock.val
+-	    / mode->control_properties.exposure_factor
+-	    / mode->image_properties.line_length;
++	dev_dbg(dev, "%s: Calculated coarse time: %d [lines]\n",
++		__func__, coarse_time);
++	dev_dbg(dev, "%s: Calculated fine integration time: %d [pixels]\n",
++		__func__, fine_int_time);
+ 
+ 	if (coarse_time < IMX477_MIN_COARSE_EXPOSURE)
+ 		coarse_time = IMX477_MIN_COARSE_EXPOSURE;
+ 	else if (coarse_time > max_coarse_time) {
+ 		coarse_time = max_coarse_time;
+-		dev_dbg(dev,
++		dev_err(dev,
+ 			"%s: exposure limited by frame_length: %d [lines]\n",
+ 			__func__, max_coarse_time);
  	}
  
- 	/* Probe sensor model id registers */
-@@ -676,6 +684,10 @@ static int imx477_board_setup(struct imx477 *priv)
- err_reg_probe:
- 	imx477_power_off(s_data);
+-	dev_dbg(dev, "%s: val: %lld [us], coarse_time: %d [lines]\n",
+-		__func__, val, coarse_time);
+-
+ 	imx477_get_coarse_integ_time_regs(ct_regs, coarse_time);
  
-+err_power_on:
-+	if (pdata->mclk_name)
-+		camera_common_mclk_disable(s_data);
+ 	for (i = 0; i < 2; i++) {
+ 		err = imx477_write_reg(s_data, ct_regs[i].addr, ct_regs[i].val);
+ 		if (err) {
+-			dev_dbg(dev,
++			dev_err(dev,
+ 				"%s: coarse_time control error\n", __func__);
+ 			return err;
+ 		}
+ 	}
+ 
++	err = imx477_write_reg(s_data, IMX477_FINE_INTEG_TIME_ADDR_MSB,
++			       (fine_int_time >> 8) & 0xFF);
++	err |= imx477_write_reg(s_data, IMX477_FINE_INTEG_TIME_ADDR_LSB,
++				fine_int_time & 0xFF);
 +
- done:
++	if (err) {
++		dev_err(dev, "%s: fine integration time error\n", __func__);
++	}
++
  	return err;
  }
--- 
-2.17.1
-
+ 

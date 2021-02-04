@@ -14,24 +14,24 @@ In this repository you will find the following structure:
 ├── li-camera-calibration-files
 │   └── camera_overrides.isp
 ├── patches_nano
-│   ├── 4.4.1_evm_imx477-v0.1.0.patch
+│   ├── 4.5_nano_imx477-v0.1.0.patch
 │   └── series
 ├── patches_nx
-│   ├── 4.4.1_nx_imx477-v0.1.0.patch
+│   ├── 4.5_nx_imx477-v0.1.0.patch
 │   └── series
 └── README.md
 ```
 where:
 
-* `4.4.1_*_imx477-v0.1.0.patch` is the patch to be applied on the JetPack 4.4.1 sources in order to add support for the IMX477 camera sensor in the Jetson Xavier NX and Jetson Nano.
+* `4.5_*_imx477-v0.1.0.patch` is the patch to be applied on the JetPack 4.5 sources in order to add support for the IMX477 camera sensor in the Jetson Xavier NX and Jetson Nano.
 * `series` is a file containing the patch name in order to apply it by using the quilt tool.
 * `camera_overrides.isp` is a file which contains a set of calibration parameters for the Image Signal Processor of the HQ camera.
 
-## JetPack 4.4.1 installation instructions
+## JetPack installation instructions
 
-You can download and install the JetPack 4.4.1 by following the instructions below:
+You can download and install the JetPack by following the instructions below:
 
-* [JetPack 4.4/4.4.1 download and installation instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Download_the_JetPack_4.4)
+* [JetPack download and installation instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Download_the_JetPack_4.4)
 
 ## Driver Installation instructions
 
@@ -45,9 +45,9 @@ This is the easiest and fastest way to install the driver. In order to install t
 
 ### OPTION B: Applying the patches on the sources
 
-In order to apply the patch on the JetPack 4.4.1 sources with Xavier NX and Nano support, you must perform the following instructions:
+In order to apply the patch on the JetPack sources with Xavier NX and Nano support, you must perform the following instructions:
  
-* [JetPack 4.4.1 sources download instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Download_the_JetPack_sources)
+* [JetPack sources download instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Download_the_JetPack_sources)
 * [Patch instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Patch_instructions)
 * [Kernel build instructions](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Kernel_build_instructions)
 * [Flash the Jetson](https://developer.ridgerun.com/wiki/index.php?title=Raspberry_Pi_HQ_camera_IMX477_Linux_driver_for_Jetson#Flash_the_Jetson)
