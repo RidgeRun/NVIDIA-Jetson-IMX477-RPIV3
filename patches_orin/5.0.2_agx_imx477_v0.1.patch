@@ -1,0 +1,655 @@
+From 2769d98d4b0a193d0fff400ba6d5b2d1a19fc8bc Mon Sep 17 00:00:00 2001
+From: Fernando Herrera <fernando.herrera@ridgerun.com>
+Date: Wed, 14 Sep 2022 09:49:16 -0600
+Subject: [PATCH] Add imx477 driver
+
+---
+ ...tegra234-p3737-0000-camera-imx477-j20.dtsi | 366 ++++++++++++++++++
+ ...gra234-p3737-0000-camera-imx477-modes.dtsi |  92 +++++
+ .../tegra234-p3701-0000-p3737-0000.dts        |   2 +-
+ .../kernel-5.10/arch/arm64/configs/defconfig  |   1 +
+ kernel/nvidia/drivers/media/i2c/Kconfig       |   8 +
+ kernel/nvidia/drivers/media/i2c/Makefile      |   1 +
+ kernel/nvidia/drivers/media/i2c/j20.c         |  96 +++++
+ 7 files changed, 565 insertions(+), 1 deletion(-)
+ create mode 100644 hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-j20.dtsi
+ create mode 100644 hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-modes.dtsi
+ create mode 100644 kernel/nvidia/drivers/media/i2c/j20.c
+
+diff --git a/hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-j20.dtsi b/hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-j20.dtsi
+new file mode 100644
+index 000000000..2333f381b
+--- /dev/null
++++ b/hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-j20.dtsi
+@@ -0,0 +1,366 @@
++/*
++ * Copyright (c) 2018-2022, NVIDIA CORPORATION.  All rights reserved.
++ * Copyright (c) 2022, RidgeRun LLC.  All rights reserved.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++
++
++/* Cameras get mapped as follows:
+++------+-----------------+---------+------------+
++| Port | Bus             | Address |  CSI port  |
+++------+-----------------+---------+------------+
++| J1_1 | 8 (31e0000.i2c) | 0x1a    |  CSI-A / 0 |
+++------+-----------------+---------+------------+
++| J1_2 | 2 (3180000.i2c) | 0x1a    |  CSI-C / 2 |
+++------+-----------------+---------+------------+
++| J1_3 | 1 (c240000.i2c) | 0x1a    |  CSI-E / 4 |
+++------+-----------------+---------+------------+
++| J2_1 | 8 (31e0000.i2c) | 0x18    |  CSI-B / 1 |
+++------+-----------------+---------+------------+
++| J2_2 | 2 (3180000.i2c) | 0x18    |  CSI-D / 3 |
+++------+-----------------+---------+------------+
++| J2_3 | 1 (c240000.i2c) | 0x18    |  CSI-F / 5 |
+++------+-----------------+---------+------------+
++*/
++
++#define CAM0_RST_L	TEGRA234_MAIN_GPIO(H, 3)
++#define CAM0_PWDN	TEGRA234_MAIN_GPIO(H, 6)
++#define CAM1_RST_L	TEGRA234_MAIN_GPIO(AC, 1)
++#define CAM1_PWDN	TEGRA234_MAIN_GPIO(AC, 0)
++
++
++/ {
++    tegra-capture-vi  {
++        num-channels = <3>;
++        status = "okay";
++        ports {
++            #address-cells = <1>;
++            #size-cells = <0>;
++            status = "okay";
++            vi_port0: port@0 {
++                reg = <0>;
++                status = "okay";
++                rbpcv3_imx477_vi_in0: endpoint {
++                    status = "okay";
++                    port-index = <0>;
++                    bus-width = <2>;
++                    remote-endpoint = <&rbpcv3_imx477_csi_out0>;
++                };
++            };
++            vi_port1: port@1 {
++                reg = <1>;
++                status = "okay";
++                rbpcv3_imx477_vi_in1: endpoint {
++                    status = "okay";
++                    port-index = <2>;
++                    bus-width = <2>;
++                    remote-endpoint = <&rbpcv3_imx477_csi_out1>;
++                };
++            };
++            vi_port2: port@2 {
++                reg = <2>;
++                status = "okay";
++                rbpcv3_imx477_vi_in2: endpoint {
++                    status = "okay";
++                    port-index = <4>;
++                    bus-width = <2>;
++                    remote-endpoint = <&rbpcv3_imx477_csi_out2>;
++                };
++            };
++        };
++    };
++
++    host1x@13e00000 {
++        nvcsi@15a00000 {
++            num-channels = <3>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++            status = "okay";
++            csi_chan0: channel@0 {
++                reg = <0>;
++                status = "okay";
++                ports {
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++                    status = "okay";
++                    csi_chan0_port0: port@0 {
++                        reg = <0>;
++                        status = "okay";
++                        rbpcv3_imx477_csi_in0: endpoint@0 {
++                            status = "okay";
++                            port-index = <0>;
++                            bus-width = <2>;
++                            remote-endpoint = <&rbpcv3_imx477_sensor_out0>;
++                        };
++                    };
++                    csi_chan0_port1: port@1 {
++                        reg = <1>;
++                        status = "okay";
++                        rbpcv3_imx477_csi_out0: endpoint@1 {
++                            status = "okay";
++                            remote-endpoint = <&rbpcv3_imx477_vi_in0>;
++                        };
++                    };
++                };
++            };
++            csi_chan1: channel@1 {
++                reg = <1>;
++                ports {
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++                    status = "okay";
++                    port@0 {
++                        reg = <0>;
++                        status = "okay";
++                        rbpcv3_imx477_csi_in1: endpoint@2 {
++                            status = "okay";
++                            port-index = <2>;
++                            bus-width = <2>;
++                            remote-endpoint = <&rbpcv3_imx477_sensor_out1>;
++                        };
++                    };
++                    port@1 {
++                        reg = <1>;
++                        status = "okay";
++                        rbpcv3_imx477_csi_out1: endpoint@3 {
++                            status = "okay";
++                            remote-endpoint = <&rbpcv3_imx477_vi_in1>;
++                        };
++                    };
++                };
++            };
++            csi_chan2: channel@2 {
++                reg = <2>;
++                ports {
++                    #address-cells = <1>;
++                    #size-cells = <0>;
++                    status = "okay";
++                    port@0 {
++                        reg = <0>;
++                        status = "okay";
++                        rbpcv3_imx477_csi_in2: endpoint@4 {
++                            status = "okay";
++                            port-index = <4>;
++                            bus-width = <2>;
++                            remote-endpoint = <&rbpcv3_imx477_sensor_out2>;
++                        };
++                    };
++                    port@1 {
++                        reg = <1>;
++                        status = "okay";
++                        rbpcv3_imx477_csi_out2: endpoint@5 {
++                            status = "okay";
++                            remote-endpoint = <&rbpcv3_imx477_vi_in2>;
++                        };
++                    };
++                };
++            };
++        };
++    };
++
++    /* J20 is at bus 2 (3180000.i2c), address 0x20 */
++    i2c@3180000 {
++        j20_6@20 {
++            compatible = "nvidia,j20";
++            reg = <0x20>;
++            status = "okay";
++        };
++    };
++
++    /* Bus 8 */
++    i2c@31e0000 {
++        imx477_cam0: imx477_a@1a {
++            status = "okay";
++            compatible = "ridgerun,imx477";
++            /* I2C device address */
++            reg = <0x1a>;
++
++            /* V4L2 device node location */
++            devnode = "video0";
++
++            /* Physical dimensions of sensor */
++            physical_w = "3.680";
++            physical_h = "2.760";
++
++            sensor_model = "imx477";
++
++            use_sensor_mode_id = "true";
++            reset-gpios = <&tegra_main_gpio CAM0_PWDN GPIO_ACTIVE_HIGH>;
++
++#undef TEGRA_SINTERFACE
++#define TEGRA_SINTERFACE "serial_a"
++#include "tegra234-p3737-0000-camera-imx477-modes.dtsi"
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++                status = "okay";
++                port@0 {
++                    reg = <0>;
++                    status = "okay";
++                    rbpcv3_imx477_sensor_out0: endpoint {
++                        status = "okay";
++                        port-index = <0>;
++                        bus-width = <2>;
++                        remote-endpoint = <&rbpcv3_imx477_csi_in0>;
++                    };
++                };
++            };
++        };
++    };
++
++    /* Bus 2 */
++    i2c@3180000 {
++        imx477_cam1: imx477_c@1a {
++            status = "okay";
++            compatible = "ridgerun,imx477";
++            /* I2C device address */
++            reg = <0x1a>;
++
++            /* V4L2 device node location */
++            devnode = "video1";
++
++            /* Physical dimensions of sensor */
++            physical_w = "3.680";
++            physical_h = "2.760";
++
++            sensor_model = "imx477";
++
++            use_sensor_mode_id = "true";
++            reset-gpios = <&tegra_main_gpio CAM1_PWDN GPIO_ACTIVE_HIGH>;
++
++#undef TEGRA_SINTERFACE
++#define TEGRA_SINTERFACE "serial_c"
++#include "tegra234-p3737-0000-camera-imx477-modes.dtsi"
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++                status = "okay";
++                port@0 {
++                    reg = <0>;
++                    status = "okay";
++                    rbpcv3_imx477_sensor_out1: endpoint {
++                        status = "okay";
++                        port-index = <2>;
++                        bus-width = <2>;
++                        remote-endpoint = <&rbpcv3_imx477_csi_in1>;
++                    };
++                };
++            };
++        };
++    };
++
++    /* Bus 1 */
++    i2c@c240000 {
++        imx477_cam2: imx477_e@1a {
++            status = "okay";
++            compatible = "ridgerun,imx477";
++            /* I2C device address */
++            reg = <0x1a>;
++
++            /* V4L2 device node location */
++            devnode = "video2";
++
++            /* Physical dimensions of sensor */
++            physical_w = "3.680";
++            physical_h = "2.760";
++
++            sensor_model = "imx477";
++
++            use_sensor_mode_id = "true";
++
++            reset-gpios = <&tegra_main_gpio CAM0_RST_L GPIO_ACTIVE_HIGH>;
++#undef TEGRA_SINTERFACE
++#define TEGRA_SINTERFACE "serial_e"
++#include "tegra234-p3737-0000-camera-imx477-modes.dtsi"
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++                status = "okay";
++                port@0 {
++                    reg = <0>;
++                    status = "okay";
++                    rbpcv3_imx477_sensor_out2: endpoint {
++                        status = "okay";
++                        port-index = <4>;
++                        bus-width = <2>;
++                        remote-endpoint = <&rbpcv3_imx477_csi_in2>;
++                    };
++                };
++            };
++        };
++    };
++
++};
++
++/ {
++    tegra-camera-platform {
++        status = "okay";
++        compatible = "nvidia, tegra-camera-platform";
++
++        num_csi_lanes = <6>;
++        max_lane_speed = <1500000>;
++        min_bits_per_pixel = <10>;
++        vi_peak_byte_per_pixel = <2>;
++        vi_bw_margin_pct = <25>;
++        max_pixel_rate = <7500000>;
++        isp_peak_byte_per_pixel = <5>;
++        isp_bw_margin_pct = <25>;
++
++        modules {
++            status = "okay";
++            cam_module0: module0 {
++                status = "okay";
++                /* If using IMX477 nvargus will fail to find the camera */
++                badge = "imx477_bottomleft_477IMX";
++                position = "bottomleft";
++                orientation = "0";
++                cam_module0_drivernode0: drivernode0 {
++                    status = "okay";
++                    pcl_id = "v4l2_sensor";
++                    devname = "imx477 8-001a";
++                    proc-device-tree = "/proc/device-tree/i2c@31e0000/imx477_a@1a";
++                };
++            };
++            cam_module1: module1 {
++                status = "okay";
++                badge = "imx477_centerleft_477IMX";
++                position = "centerleft";
++                orientation = "0";
++                cam_module1_drivernode0: drivernode0 {
++                    status = "okay";
++                    pcl_id = "v4l2_sensor";
++                    devname = "imx477 2-001a";
++                    proc-device-tree = "/proc/device-tree/i2c@3180000/imx477_c@1a";
++                };
++            };
++            cam_module2: module2 {
++                status = "okay";
++                badge = "imx477_topleft_477IMX";
++                position = "topleft";
++                orientation = "0";
++                cam_module2_drivernode0: drivernode0 {
++                    status = "okay";
++                    pcl_id = "v4l2_sensor";
++                    devname = "imx477 1-001a";
++                    proc-device-tree = "/proc/device-tree/i2c@c240000/imx477_e@1a";
++                };
++            };
++        };
++    };
++};
+diff --git a/hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-modes.dtsi b/hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-modes.dtsi
+new file mode 100644
+index 000000000..d3452ca3e
+--- /dev/null
++++ b/hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-modes.dtsi
+@@ -0,0 +1,92 @@
++mode0 { /* IMX477_MODE_3840x2160 */
++    mclk_khz = "24000";
++    num_lanes = "2";
++    tegra_sinterface = TEGRA_SINTERFACE;
++    phy_mode = "DPHY";
++    discontinuous_clk = "no";
++    dpcm_enable = "false";
++    cil_settletime = "0";
++
++    active_w = "3840";
++    active_h = "2160";
++    mode_type = "bayer";
++    pixel_phase = "rggb";
++    csi_pixel_bit_depth = "10";
++    line_length = "11200";
++    readout_orientation = "90";
++    inherent_gain = "1";
++    mclk_multiplier = "80";
++
++    /* Use two pixel clocks:
++     1. One is used to calculate the mipi_clock in the subsystem and match the mipi clock of the sensor
++     2. Internal sensor pix_clk of the sensor to calculate fps, and integration */
++
++    /* Use this pix clk to get 1.5 gbps per lane inside the camera_common calculations */
++    pix_clk_hz = "300000000";
++
++    gain_factor = "16";
++    framerate_factor = "1000000";
++    exposure_factor = "1000000";
++    min_gain_val = "16"; /* 1.00x */
++    max_gain_val = "356"; /* 22x */
++    step_gain_val = "1";
++    default_gain = "16"; /* 1.00x */
++    min_hdr_ratio = "1";
++    max_hdr_ratio = "1";
++    min_framerate = "2000000"; /* 2.0 fps */
++    max_framerate = "30000000"; /* 30.0 fps */
++    step_framerate = "1";
++    default_framerate = "30000000"; /* 30.0 fps */
++    min_exp_time = "13"; /* us */
++    max_exp_time = "683709"; /* us */
++    step_exp_time = "1";
++    default_exp_time = "2495"; /* us */
++
++    embedded_metadata_height = "2";
++};
++mode1 { /* IMX477_MODE_1920X1080 */
++    mclk_khz = "24000";
++    num_lanes = "2";
++    tegra_sinterface = TEGRA_SINTERFACE;
++    phy_mode = "DPHY";
++    discontinuous_clk = "no";
++    dpcm_enable = "false";
++    cil_settletime = "0";
++
++    active_w = "1920";
++    active_h = "1080";
++    mode_type = "bayer";
++    pixel_phase = "rggb";
++    csi_pixel_bit_depth = "10";
++    readout_orientation = "90";
++    line_length = "7000";
++    inherent_gain = "1";
++    mclk_multiplier = "80";
++
++    /* Use two pixel clocks:
++     1. One is used to calculate the mipi_clock in the subsystem and match the mipi clock of the sensor,
++     2. Internal sensor pix_clk of the sensor to calculate fps, and integration */
++
++    /* Use this pix clk to get 1.5 gbps per lane inside the camera_common calculations */
++    pix_clk_hz = "300000000";
++
++    gain_factor = "16";
++    framerate_factor = "1000000";
++    exposure_factor = "1000000";
++    min_gain_val = "16"; /* 1.00x */
++    max_gain_val = "356"; /* 22x */
++    step_gain_val = "1";
++    default_gain = "16"; /* 1.00x */
++    min_hdr_ratio = "1";
++    max_hdr_ratio = "1";
++    min_framerate = "2000000"; /* 2.0 fps */
++    max_framerate = "60000000"; /* 60.0 fps */
++    step_framerate = "1";
++    default_framerate = "60000000"; /* 60.0 fps */
++    min_exp_time = "13"; /* us */
++    max_exp_time = "683709"; /* us */
++    step_exp_time = "1";
++    default_exp_time = "2495"; /* us */
++
++    embedded_metadata_height = "2";
++};
+diff --git a/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3701-0000-p3737-0000.dts b/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3701-0000-p3737-0000.dts
+index 0a4d2bbd0..d2e9e9f68 100644
+--- a/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3701-0000-p3737-0000.dts
++++ b/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3701-0000-p3737-0000.dts
+@@ -19,13 +19,13 @@
+ #include "tegra234-power-tree-p3701-0000-p3737-0000.dtsi"
+ #include "tegra234-dcb-p3701-0000-a02-p3737-0000-a01.dtsi"
+ #include <tegra234-soc/mods-simple-bus.dtsi>
+-#include "cvb/tegra234-p3737-camera-modules.dtsi"
+ 
+ #include <t234-common-cvm/tegra234-cpuidle.dtsi>
+ #include <t234-common-cvm/tegra234-thermal.dtsi>
+ #include <t234-common-cvm/tegra234-thermal-cooling.dtsi>
+ #include <t234-common-cvm/tegra234-thermal-userspace-alert.dtsi>
+ #include <tegra234-soc/tegra234-soc-hwpm.dtsi>
++#include "cvb/tegra234-p3737-0000-camera-imx477-j20.dtsi"
+ 
+ #include "tegra234-p3701-0000-prod.dtsi"
+ 
+diff --git a/kernel/kernel-5.10/arch/arm64/configs/defconfig b/kernel/kernel-5.10/arch/arm64/configs/defconfig
+index c49c5c304..82070e655 100644
+--- a/kernel/kernel-5.10/arch/arm64/configs/defconfig
++++ b/kernel/kernel-5.10/arch/arm64/configs/defconfig
+@@ -876,6 +876,7 @@ CONFIG_VIDEO_CAMERA=y
+ CONFIG_VIDEO_ISC=m
+ CONFIG_VIDEO_CDI=m
+ CONFIG_V4L_TEST_DRIVERS=y
++CONFIG_VIDEO_J20=m
+ CONFIG_NV_VIDEO_IMX185=m
+ CONFIG_NV_VIDEO_IMX219=m
+ CONFIG_NV_VIDEO_IMX477=m
+diff --git a/kernel/nvidia/drivers/media/i2c/Kconfig b/kernel/nvidia/drivers/media/i2c/Kconfig
+index 8362bc85b..06d64436d 100644
+--- a/kernel/nvidia/drivers/media/i2c/Kconfig
++++ b/kernel/nvidia/drivers/media/i2c/Kconfig
+@@ -22,6 +22,14 @@ config NV_VIDEO_IMX477
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called imx477.
+ 
++config VIDEO_J20
++	tristate "Auvidea J20 Expansion board"
++	depends on VIDEO_V4L2 && I2C && VIDEO_V4L2_SUBDEV_API
++	help
++	  Support for the Auvidea J20 expansion board.
++	  To compile this driver as a module, choose M here: the
++	  module will be called j20.
++
+ config NV_VIDEO_IMX219
+         tristate "IMX219 camera sensor support"
+ 	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+diff --git a/kernel/nvidia/drivers/media/i2c/Makefile b/kernel/nvidia/drivers/media/i2c/Makefile
+index af6122bca..c325b0e9c 100644
+--- a/kernel/nvidia/drivers/media/i2c/Makefile
++++ b/kernel/nvidia/drivers/media/i2c/Makefile
+@@ -5,6 +5,7 @@ ccflags-y += -I$(srctree)/drivers/video/tegra/camera
+ 
+ obj-$(CONFIG_NV_VIDEO_IMX185) += nv_imx185.o
+ obj-$(CONFIG_NV_VIDEO_IMX185) += nv_imx185_v1.o
++obj-$(CONFIG_VIDEO_J20) += j20.o
+ obj-$(CONFIG_NV_VIDEO_IMX477) += nv_imx477.o
+ obj-$(CONFIG_NV_VIDEO_IMX219) += nv_imx219.o
+ obj-$(CONFIG_NV_VIDEO_IMX268) += nv_imx268.o
+diff --git a/kernel/nvidia/drivers/media/i2c/j20.c b/kernel/nvidia/drivers/media/i2c/j20.c
+new file mode 100644
+index 000000000..673fb0c4e
+--- /dev/null
++++ b/kernel/nvidia/drivers/media/i2c/j20.c
+@@ -0,0 +1,96 @@
++/*
++ * j20.c - J20 driver
++ *
++ * Copyright (C) 2021 RidgeRun, LLC (http://www.ridgerun.com)
++ * All Rights Reserved.
++ *
++ * The contents of this software are proprietary and confidential to RidgeRun,
++ * LLC.  No part of this program may be photocopied, reproduced or translated
++ * into another programming language without prior written consent of
++ * RidgeRun, LLC.  The user is free to modify the source code after obtaining
++ * a software license from RidgeRun.  All source code changes must be provided
++ * back to RidgeRun without any encumbrance.
++ */
++
++#include <linux/slab.h>
++#include <linux/uaccess.h>
++#include <linux/gpio.h>
++#include <linux/module.h>
++
++#include <linux/seq_file.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/of_gpio.h>
++
++#include <linux/i2c-dev.h>
++#include <linux/fs.h>
++
++#include <media/camera_common.h>
++#include <dt-bindings/gpio/tegra-gpio.h>
++
++static struct of_device_id j20_of_match[] = {
++	{.compatible = "nvidia,j20",},
++	{},
++};
++
++MODULE_DEVICE_TABLE(of, j20_of_match);
++
++static int j20_probe(struct i2c_client *client, const struct i2c_device_id *id)
++{
++	const struct of_device_id *match;
++
++	dev_info(&client->dev, "[J20] Driver: Function: %s.\n", __func__);
++
++	match = of_match_device(j20_of_match, &client->dev);
++	if (!match) {
++		dev_info(&client->dev, "Failed to find matching dt id\n");
++		return -1;
++	}
++
++	if (i2c_smbus_write_byte_data(client, 6, 0x3e) < 0)
++		dev_err(&client->dev, "Failed writing to reg: %d val %d\n", 6,
++			0x3e);
++	if (i2c_smbus_write_byte_data(client, 7, 0x33) < 0)
++		dev_err(&client->dev, "Failed writing to reg: %d val %d\n", 7,
++			0x33);
++	if (i2c_smbus_write_byte_data(client, 2, 0xfe) < 0)
++		dev_err(&client->dev, "Failed writing to reg: %d val %d\n", 2,
++			0xfe);
++	if (i2c_smbus_write_byte_data(client, 3, 0xff) < 0)
++		dev_err(&client->dev, "Failed writing to reg: %d val %d\n", 3,
++			0xff);
++
++	dev_info(&client->dev, "[J20]: Setup configuration done.\n");
++	msleep(200);
++
++	return 0;
++}
++
++static int j20_remove(struct i2c_client *client)
++{
++	return 0;
++}
++
++static const struct i2c_device_id j20_id[] = {
++	{"j20", 0},
++	{}
++};
++
++MODULE_DEVICE_TABLE(i2c, j20_id);
++
++static struct i2c_driver j20_i2c_driver = {
++	.driver = {
++		   .name = "j20",
++		   .owner = THIS_MODULE,
++		   .of_match_table = of_match_ptr(j20_of_match),
++		   },
++	.probe = j20_probe,
++	.remove = j20_remove,
++	.id_table = j20_id,
++};
++
++module_i2c_driver(j20_i2c_driver);
++
++MODULE_DESCRIPTION("Driver for J20 setup");
++MODULE_AUTHOR("<support@ridgerun.com>");
++MODULE_LICENSE("GPL v2");
+-- 
+2.25.1
+
