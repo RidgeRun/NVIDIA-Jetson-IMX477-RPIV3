@@ -1,20 +1,8 @@
-From 2769d98d4b0a193d0fff400ba6d5b2d1a19fc8bc Mon Sep 17 00:00:00 2001
-From: Fernando Herrera <fernando.herrera@ridgerun.com>
-Date: Wed, 14 Sep 2022 09:49:16 -0600
-Subject: [PATCH] Add imx477 driver
+commit 43c4360b7f6a327ee5e4cf90f440eec1fe45b0a2
+Author: Marek Knosala <m.knosala@vertigo.global>
+Date:   Thu May 18 19:37:16 2023 +0200
 
----
- ...tegra234-p3737-0000-camera-imx477-j20.dtsi | 366 ++++++++++++++++++
- ...gra234-p3737-0000-camera-imx477-modes.dtsi |  92 +++++
- .../tegra234-p3701-0000-p3737-0000.dts        |   2 +-
- .../kernel-5.10/arch/arm64/configs/defconfig  |   1 +
- kernel/nvidia/drivers/media/i2c/Kconfig       |   8 +
- kernel/nvidia/drivers/media/i2c/Makefile      |   1 +
- kernel/nvidia/drivers/media/i2c/j20.c         |  96 +++++
- 7 files changed, 565 insertions(+), 1 deletion(-)
- create mode 100644 hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-j20.dtsi
- create mode 100644 hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-modes.dtsi
- create mode 100644 kernel/nvidia/drivers/media/i2c/j20.c
+    kernel patch
 
 diff --git a/hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-j20.dtsi b/hardware/nvidia/platform/t23x/concord/kernel-dts/cvb/tegra234-p3737-0000-camera-imx477-j20.dtsi
 new file mode 100644
@@ -487,7 +475,7 @@ index 000000000..d3452ca3e
 +    embedded_metadata_height = "2";
 +};
 diff --git a/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3701-0000-p3737-0000.dts b/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3701-0000-p3737-0000.dts
-index 0a4d2bbd0..d2e9e9f68 100644
+index 210935f41..2185b1755 100644
 --- a/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3701-0000-p3737-0000.dts
 +++ b/hardware/nvidia/platform/t23x/concord/kernel-dts/tegra234-p3701-0000-p3737-0000.dts
 @@ -19,13 +19,13 @@
@@ -506,19 +494,19 @@ index 0a4d2bbd0..d2e9e9f68 100644
  #include "tegra234-p3701-0000-prod.dtsi"
  
 diff --git a/kernel/kernel-5.10/arch/arm64/configs/defconfig b/kernel/kernel-5.10/arch/arm64/configs/defconfig
-index c49c5c304..82070e655 100644
+index bda2dff57..893b265f5 100644
 --- a/kernel/kernel-5.10/arch/arm64/configs/defconfig
 +++ b/kernel/kernel-5.10/arch/arm64/configs/defconfig
-@@ -876,6 +876,7 @@ CONFIG_VIDEO_CAMERA=y
+@@ -882,6 +882,7 @@ CONFIG_VIDEO_CAMERA=y
  CONFIG_VIDEO_ISC=m
  CONFIG_VIDEO_CDI=m
  CONFIG_V4L_TEST_DRIVERS=y
 +CONFIG_VIDEO_J20=m
+ CONFIG_VIDEO_ECAM=m
  CONFIG_NV_VIDEO_IMX185=m
  CONFIG_NV_VIDEO_IMX219=m
- CONFIG_NV_VIDEO_IMX477=m
 diff --git a/kernel/nvidia/drivers/media/i2c/Kconfig b/kernel/nvidia/drivers/media/i2c/Kconfig
-index 8362bc85b..06d64436d 100644
+index 0592973a8..3b2cdece4 100644
 --- a/kernel/nvidia/drivers/media/i2c/Kconfig
 +++ b/kernel/nvidia/drivers/media/i2c/Kconfig
 @@ -22,6 +22,14 @@ config NV_VIDEO_IMX477
@@ -533,11 +521,11 @@ index 8362bc85b..06d64436d 100644
 +	  To compile this driver as a module, choose M here: the
 +	  module will be called j20.
 +
- config NV_VIDEO_IMX219
-         tristate "IMX219 camera sensor support"
- 	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+ config VIDEO_ECAM
+         tristate "ECAM camera sensor support"
+         depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
 diff --git a/kernel/nvidia/drivers/media/i2c/Makefile b/kernel/nvidia/drivers/media/i2c/Makefile
-index af6122bca..c325b0e9c 100644
+index f8f6c3ba0..ae03c1406 100644
 --- a/kernel/nvidia/drivers/media/i2c/Makefile
 +++ b/kernel/nvidia/drivers/media/i2c/Makefile
 @@ -5,6 +5,7 @@ ccflags-y += -I$(srctree)/drivers/video/tegra/camera
@@ -650,6 +638,3 @@ index 000000000..673fb0c4e
 +MODULE_DESCRIPTION("Driver for J20 setup");
 +MODULE_AUTHOR("<support@ridgerun.com>");
 +MODULE_LICENSE("GPL v2");
--- 
-2.25.1
-
